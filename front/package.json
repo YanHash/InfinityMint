@@ -10,8 +10,11 @@
   },
   "dependencies": {
     "next": "^15.1.7",
+    "rainbowkit": "^0.0.1",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "viem": "^2.23.1",
+    "wagmi": "^2.14.11"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
