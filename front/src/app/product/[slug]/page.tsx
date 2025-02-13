@@ -1,5 +1,5 @@
+"use-client"
 import React from "react";
-import { GetStaticProps } from "next";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,26 +12,44 @@ interface Product {
   imageUrl: string;
 }
 
+const dummyProduct: Product = {
+  id: "1",
+  name: "Rare NFT #001",
+  description: "Une œuvre d'art numérique unique en son genre.",
+  price: 2.5, // Prix en ETH
+  imageUrl: "/images/nft1.webp",
+};
+
 const ProductPage: React.FC<{ product: Product }> = ({ product }) => {
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <Card className="max-w-md w-full p-4 bg-white shadow-lg rounded-2xl">
+    <div className="flex min-h-screen">
+      {/* Image Section */}
+      <div className="w-1/2 h-screen relative">
         <Image
-          src="/images/nft1.webp"
-          alt="test"
-          width={400}
-          height={300}
-          className="rounded-lg object-cover"
+          src={product.imageUrl}
+          alt={product.name}
+          layout="fill"
+          objectFit="cover"
+          className="rounded-r-lg"
         />
-        <CardContent className="p-4">
-          <h1 className="text-xl font-semibold">test</h1>
-          <p className="text-gray-600 my-2">ceci est une description</p>
-          <p className="text-lg font-bold text-gray-900">$35</p>
-          <Button className="mt-4 w-full">Add to Cart</Button>
-        </CardContent>
-      </Card>
+      </div>
+
+      {/* Product Details Section */}
+      <div className="w-1/2 flex justify-center items-center p-8 bg-white">
+        <Card className="max-w-md w-full shadow-lg rounded-2xl p-6">
+          <CardContent>
+            <h1 className="text-2xl font-bold text-gray-900">{product.name}</h1>
+            <p className="text-gray-600 my-2">{product.description}</p>
+            <p className="text-lg font-bold text-gray-900">Ξ {product.price} ETH</p>
+            <Button className="mt-4 w-full">Buy Now</Button>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };
 
-export default ProductPage;
+// 🔥 Correction : un seul `export default` qui affiche `ProductPage` avec les données de `dummyProduct`
+export default function Page() {
+  return <ProductPage product={dummyProduct} />;
+}
