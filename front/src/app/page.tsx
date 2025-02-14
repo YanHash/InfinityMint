@@ -2,6 +2,10 @@
 import {MainMenubar} from "@/components/ui/menubar";
 import React, { useEffect, useState } from "react";
 
+interface NftData {
+    [key: string]: string[];
+  }
+
 export default function Home() {
     const [nfts, setNfts] = useState<NftData[]>([]);
 
