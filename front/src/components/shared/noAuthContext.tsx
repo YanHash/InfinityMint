@@ -1,5 +1,4 @@
 import * as React from "react"
-import { useState } from "react";
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -9,7 +8,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { ConnectButton } from "@rainbow-me/rainbowkit"
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 
 export function NoAuth() {
@@ -32,7 +30,7 @@ export function NoAuth() {
                 </CardContent>
 
                 <CardFooter className="flex gap-4 justify-center items-center mt-6">
-                    <Button variant="outline" className="text-sm py-2 w-32">
+                    <Button onClick={()=>{window.location.href="/"}} variant="outline" className="text-sm py-2 w-32">
                         Browse only
                     </Button>
                     {CustomConnectButton()}
