@@ -19,7 +19,7 @@ import { ReactNode } from 'react';
 
 
 export const config = getDefaultConfig({
-    appName: 'My RainbowKit App',
+    appName: 'Infinity Mint',
     projectId: '65af7ffc03881e7982d909862c11aa59',
     chains: [sepolia, hardhat, mainnet],
     ssr: true, 
