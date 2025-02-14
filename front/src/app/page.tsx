@@ -1,5 +1,4 @@
 "use client"
-import {MainMenubar} from "@/components/ui/menubar";
 import React, { useEffect, useState } from "react";
 
 interface NftData {
