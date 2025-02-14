@@ -1,0 +1,10 @@
+{
+    "nfts": [
+        { "nft1": ["donnée1", "donnée2", "donnée3"] },
+        { "nft2": ["donnée1", "donnée2", "donnée3"] },
+        { "nft3": ["donnée1", "donnée2", "donnée3"] },
+        { "nft4": ["donnée1", "donnée2", "donnée3"] },
+        { "nft5": ["donnée1", "donnée2", "donnée3"] },
+        { "nft6": ["donnée1", "donnée2", "donnée3"] }
+    ]
+}
