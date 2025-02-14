@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/menubar";
 import { config } from "@/provider/CustomRainbowKitProvider";
 import { useSwitchChain, useChainId, useBalance, useDisconnect } from "wagmi";
+import { Welcome } from "./welcomeComponent";
 
 export function MenubarAuth({ address, isConnected }: { address: string; isConnected: boolean; }) {
     const { switchChain } = useSwitchChain();
@@ -18,6 +19,7 @@ export function MenubarAuth({ address, isConnected }: { address: string; isConne
     const { disconnect } = useDisconnect();
 
     return (
+        <>
         <Menubar>
             {/* Wallet Address */}
             <MenubarMenu>
@@ -71,5 +73,7 @@ export function MenubarAuth({ address, isConnected }: { address: string; isConne
                 </MenubarTrigger>
             </MenubarMenu>
         </Menubar>
+        {Welcome()}
+        </>
     );
 }

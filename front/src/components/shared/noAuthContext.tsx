@@ -30,7 +30,7 @@ export function NoAuth() {
                 </CardContent>
 
                 <CardFooter className="flex gap-4 justify-center items-center mt-6">
-                    <Button onClick={()=>{window.location.href="/"}} variant="outline" className="text-sm py-2 w-32">
+                    <Button onClick={() => { window.location.href = "/" }} variant="outline" className="text-sm py-2 w-32">
                         Browse only
                     </Button>
                     {CustomConnectButton()}
@@ -44,10 +44,10 @@ export function NoAuth() {
 
 export function CustomConnectButton() {
     const { openConnectModal } = useConnectModal();
-  
+
     return (
-      <Button onClick={openConnectModal}>
-        Connect Wallet
-      </Button>
+        <Button onClick={openConnectModal}>
+            Connect Wallet
+        </Button>
     );
-  }
+}
