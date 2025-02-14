@@ -19,16 +19,6 @@ export function MenubarAuth({ address, isConnected }: { address: string; isConne
 
     return (
         <Menubar>
-            {/* 🔴 Logout Button */}
-
-            <MenubarMenu>
-                <MenubarTrigger
-                    onClick={() => disconnect()}
-                    className={"m-8 space-x-2 px-4 py-2 text-white bg-red-600 hover:bg-red-700 rounded-lg cursor-pointer"}>
-                    <span className={"font-bold text-sm"}>Disconnect</span>
-                </MenubarTrigger>
-            </MenubarMenu>
-
             {/* Wallet Address */}
             <MenubarMenu>
                 <MenubarTrigger className="flex items-center space-x-2 px-2 py-2 text-white rounded-lg">
@@ -69,6 +59,16 @@ export function MenubarAuth({ address, isConnected }: { address: string; isConne
                         </MenubarItem>
                     ))}
                 </MenubarContent>
+            </MenubarMenu>
+
+            {/* 🔴 Logout Button */}
+
+            <MenubarMenu>
+                <MenubarTrigger
+                    onClick={() => disconnect()}
+                    className={"m-8 space-x-2 px-4 py-2 text-white bg-red-600 hover:bg-red-700 rounded-lg cursor-pointer"}>
+                    <span className={"font-bold text-sm"}>Disconnect</span>
+                </MenubarTrigger>
             </MenubarMenu>
         </Menubar>
     );
