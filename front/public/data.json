@@ -1,0 +1,35 @@
+{
+  "nfts": [
+    {
+      "collectionName": "food",
+      "collectionNfts": [
+        {
+          "id": "1",
+          "name": "Rare NFT #001",
+          "description": "Une œuvre d'art numérique unique en son genre.",
+          "price": 2.5,
+          "imageUrl": "/images/nft1.webp"
+        },
+        {
+          "id": "2",
+          "name": "Rare NFT #002",
+          "description": "Une œuvre d'art numérique unique en son genre.",
+          "price": 2.5,
+          "imageUrl": "/images/dummyMusicBand.jpg"
+        }
+      ]
+    },
+    {
+      "collectionName": "animals",
+      "collectionNfts": [
+        {
+          "id": "3",
+          "name": "Rare NFT #001",
+          "description": "Une œuvre d'art numérique unique en son genre.",
+          "price": 2.5,
+          "imageUrl": "/images/dummyNinjaTurtles.jpg"
+        }
+      ]
+    }
+  ]
+}
