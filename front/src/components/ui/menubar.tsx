@@ -287,7 +287,7 @@ const MainMenubar = () => {
             <MenubarMenu>
                 <div className={"w-full"}>
                     <MenubarTrigger className={"ml-auto"}>
-                        <Avatar>
+                        <Avatar onClick={() => router.push('/profile')}>
                             <AvatarImage src="https://github.com/shadcn.png"/>
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
