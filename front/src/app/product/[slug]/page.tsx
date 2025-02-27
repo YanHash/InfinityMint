@@ -74,8 +74,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             </div>
 
             {/* Détails NFT */}
-            <div className="w-1/2 flex justify-center items-center p-8">
-                <Card className="max-w-md w-full shadow-lg rounded-2xl p-6 bg-white">
+            <div className="w-1/2 flex  justify-center items-center p-8">
+                <Card className="w-full shadow-lg rounded-2xl p-6 bg-white">
                     <CardContent>
                         <h1 className="text-2xl font-bold text-gray-900">{product.name}</h1>
                         {product.verifiedCollection && <span className="text-green-500 text-sm font-semibold">✅ Collection Vérifiée</span>}
