@@ -22,6 +22,7 @@ contract NFTMarketplace {
 
     // Structure pour une annonce de vente
     struct Listing {
+        uint256 collectionId;
         address seller;
         uint256 price;
     }
@@ -78,7 +79,7 @@ contract NFTMarketplace {
         //token.approve(address(this), tokenId);  // Autorise la marketplace à transférer ce NFT
         require(token.getApproved(tokenId) == address(this), "Marketplace not approved");
         //token.safeTransferFrom(msg.sender, address(this), tokenId);
-        listings[nftContract][tokenId] = Listing(msg.sender, price);
+        listings[nftContract][tokenId] = Listing(0,msg.sender, price);
         emit NFTListed(nftContract, tokenId, msg.sender, price);
     }
 
@@ -88,11 +89,17 @@ contract NFTMarketplace {
         require(listing.price > 0, "NFT not for sale");
         require(msg.value >= listing.price, "Insufficient payment");
 
+        
         delete listings[nftContract][tokenId];
 
         payable(listing.seller).transfer(msg.value);
 
         IERC721(nftContract).safeTransferFrom(listing.seller, msg.sender, tokenId);
+
+        if(listing.collectionId != 0){
+          // on le supprime de la collection  
+          removeNumberByValue(collectionToNFTs[listing.collectionId], tokenId);
+        } 
 
         emit NFTSold(nftContract, tokenId, msg.sender, listing.price);
     }
@@ -135,5 +142,48 @@ contract NFTMarketplace {
         }
 
         return retour;
+    }
+
+    // UTILS :
+
+    // Trouver l'index d'une valeur
+    function findIndex(unint256[] liste, uint256 _value) public view returns (int256) {
+        for (uint256 i = 0; i < liste.length; i++) {
+            if (liste[i] == _value) {
+                return int256(i);
+            }
+        }
+        return -1; // Retourne -1 si la valeur n'est pas trouvée
+    }
+
+    // Supprimer un élément par valeur
+    function removeNumberByValue(unint256[] liste, uint256 _value) public {
+        int256 index = findIndex(liste, _value);
+        require(index >= 0, "Value not found");
+        removeNumber(liste, uint256(index));
+    }
+
+    // Supprimer un élément par index
+    function removeNumber(unint256[] liste, uint256 _index) public {
+        require(_index < liste.length, "Index out of bounds");
+
+        // Déplacer les éléments suivants vers la gauche
+        for (uint256 i = _index; i < liste.length - 1; i++) {
+            liste[i] = liste[i + 1];
+        }
+
+        // Réduire la taille du tableau
+        liste.pop();
+    }
+
+    // Obtenir la taille du tableau
+    function getLength(unint256[] liste) public view returns (uint256) {
+        return liste.length;
+    }
+
+    // Obtenir un élément du tableau
+    function getNumber(unint256[] liste, uint256 _index) public view returns (uint256) {
+        require(_index < liste.length, "Index out of bounds");
+        return liste[_index];
     }
 }

@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@rainbow-me/rainbowkit": "^2.2.3",
+    "@wagmi/core": "^2.16.4",
     "next": "^15.1.7",
     "rainbowkit": "^0.0.1",
     "react": "^19.0.0",
