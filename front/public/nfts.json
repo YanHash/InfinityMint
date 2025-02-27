@@ -4,15 +4,127 @@
         "name": "CryptoPunk #1",
         "imageUrl": "/nfts/cryptopunk1.webp",
         "description": "Un CryptoPunk ultra rare.",
-        "price": "3.5 ETH",
-        "owner": "0x123...abc"
+        "price": "3.5",
+        "owner": "0x123...abc",
+        "blockchain": "Ethereum",
+        "contractAddress": "0xABC123...XYZ",
+        "tokenId": "0001",
+        "standard": "ERC-721",
+        "attributes": {
+            "type": "Punk",
+            "rarity": "Légendaire",
+            "accessory": [
+                "Lunettes de soleil",
+                "Cigarette"
+            ],
+            "background": "Bleu"
+        },
+        "creator": "0xCBA...987",
+        "royalties": "10%",
+        "listingType": "Prix fixe",
+        "highestBid": "3.2",
+        "lastSalePrice": "2.8",
+        "marketplaceFees": "2.5%",
+        "history": [
+            {
+                "event": "Mint",
+                "from": "0x000...000",
+                "to": "0xCBA...987",
+                "price": "0",
+                "date": "2023-12-01"
+            },
+            {
+                "event": "Vente",
+                "from": "0xCBA...987",
+                "to": "0x123...abc",
+                "price": "2.8",
+                "date": "2024-01-15"
+            }
+        ],
+        "verifiedCollection": true
     },
     {
         "id": "2",
         "name": "Bored Ape #42",
         "imageUrl": "/nfts/boredape42.webp",
         "description": "Un Bored Ape Yacht Club stylé.",
-        "price": "7.2 ETH",
-        "owner": "0x456...def"
+        "price": "7.2",
+        "owner": "0x456...def",
+        "blockchain": "Ethereum",
+        "contractAddress": "0xDEF456...XYZ",
+        "tokenId": "0042",
+        "standard": "ERC-721",
+        "attributes": {
+            "type": "Ape",
+            "rarity": "Épique",
+            "hat": "Casquette rouge",
+            "glasses": "Aviator",
+            "background": "Jaune"
+        },
+        "creator": "0xFED...654",
+        "royalties": "8%",
+        "listingType": "Enchères",
+        "highestBid": "6.9",
+        "lastSalePrice": "6.5",
+        "marketplaceFees": "2.5%",
+        "history": [
+            {
+                "event": "Mint",
+                "from": "0x000...000",
+                "to": "0xFED...654",
+                "price": "0",
+                "date": "2024-02-05"
+            },
+            {
+                "event": "Vente",
+                "from": "0xFED...654",
+                "to": "0x456...def",
+                "price": "6.5",
+                "date": "2024-02-20"
+            }
+        ],
+        "verifiedCollection": true
+    },
+    {
+        "id": "3",
+        "name": "Cyber Cat #99",
+        "imageUrl": "/nfts/cybercat99.webp",
+        "description": "Un chat cybernétique de la collection Future Felines.",
+        "price": "4.8",
+        "owner": "0x789...abc",
+        "blockchain": "Ethereum",
+        "contractAddress": "0xABC789...XYZ",
+        "tokenId": "0099",
+        "standard": "ERC-721",
+        "attributes": {
+            "type": "Cat",
+            "rarity": "Légendaire",
+            "hat": "Casque VR",
+            "glasses": "Visière néon",
+            "background": "Cyberpunk violet"
+        },
+        "creator": "0xCBA...987",
+        "royalties": "10%",
+        "listingType": "Achat immédiat",
+        "highestBid": "4.5",
+        "lastSalePrice": "4.2",
+        "marketplaceFees": "2%",
+        "history": [
+            {
+                "event": "Mint",
+                "from": "0x000...000",
+                "to": "0xCBA...987",
+                "price": "0",
+                "date": "2024-01-15"
+            },
+            {
+                "event": "Vente",
+                "from": "0xCBA...987",
+                "to": "0x789...abc",
+                "price": "4.2",
+                "date": "2024-02-10"
+            }
+        ],
+        "verifiedCollection": true
     }
 ]
