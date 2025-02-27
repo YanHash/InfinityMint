@@ -269,7 +269,7 @@ const MainMenubar = () => {
             <MenubarMenu>
                 <MenubarTrigger>NFT</MenubarTrigger>
                 <MenubarContent>
-                    <MenubarItem>
+                    <MenubarItem onClick={() => router.push('/product/add')}>
                         Ajouter une NFT
                     </MenubarItem>
                     <MenubarItem disabled>Expertiser une NFT</MenubarItem>
