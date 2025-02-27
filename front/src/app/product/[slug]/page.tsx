@@ -1,9 +1,8 @@
-"use-client"
-import React from "react";
 import Image from "next/image";
-import {Card, CardContent} from "@/components/ui/card";
-import {Button} from "@/components/ui/button";
-
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import path from "path";
+import fs from "fs";
 
 interface Product {
     id: string;
@@ -13,29 +12,42 @@ interface Product {
     imageUrl: string;
 }
 
-const dummyProduct: Product = {
-    id: "1",
-    name: "Rare NFT #001",
-    description: "Une œuvre d'art numérique unique en son genre.",
-    price: 2.5, // Prix en ETH
-    imageUrl: "/images/nft1.webp",
+const getProductData = async (slug: string) => {
+    const filePath = path.join(process.cwd(), "public", "nfts.json");
+    if (!fs.existsSync(filePath)) return null;
+    const jsonData = fs.readFileSync(filePath, "utf-8");
+    const nfts: Product[] = JSON.parse(jsonData);
+    return nfts.find((nft) => nft.id === slug) || null;
 };
 
-const ProductPage: React.FC<{ product: Product }> = ({product}) => {
+export async function generateStaticParams() {
+    const filePath = path.join(process.cwd(), "public", "nfts.json");
+    if (!fs.existsSync(filePath)) return [];
+    const jsonData = fs.readFileSync(filePath, "utf-8");
+    const nfts: Product[] = JSON.parse(jsonData);
+    return nfts.map((nft) => ({ slug: nft.id }));
+}
+
+export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
+    const resolvedParams = await params;
+    if (!resolvedParams || !resolvedParams.slug) return <p className="text-center text-gray-500">NFT non trouvé</p>;
+    const product = await getProductData(resolvedParams.slug);
+
+    if (!product) return <p className="text-center text-gray-500">NFT non trouvé</p>;
+
     return (
         <div className="flex min-h-screen">
-            {/* Image Section */}
             <div className="w-1/2 h-screen relative">
-                <Image
-                    src={product.imageUrl}
-                    alt={product.name}
-                    layout="fill"
-                    objectFit="cover"
-                    className="rounded-r-lg"
-                />
+                {product.imageUrl ? (
+                    <Image
+                        src={product.imageUrl}
+                        alt={product.name}
+                        layout="fill"
+                        objectFit="cover"
+                        className="rounded-r-lg"
+                    />
+                ) : null}
             </div>
-
-            {/* Product Details Section */}
             <div className="w-1/2 flex justify-center items-center p-8 bg-white">
                 <Card className="max-w-md w-full shadow-lg rounded-2xl p-6">
                     <CardContent>
@@ -48,12 +60,4 @@ const ProductPage: React.FC<{ product: Product }> = ({product}) => {
             </div>
         </div>
     );
-};
-
-// 🔥 Correction : un seul `export default` qui affiche `ProductPage` avec les données de `dummyProduct`
-export default function Page() {
-    return (
-        <div>
-            <ProductPage product={dummyProduct}/>
-        </div>);
 }

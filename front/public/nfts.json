@@ -1,0 +1,18 @@
+[
+    {
+        "id": "1",
+        "name": "CryptoPunk #1",
+        "imageUrl": "/nfts/cryptopunk1.webp",
+        "description": "Un CryptoPunk ultra rare.",
+        "price": "3.5 ETH",
+        "owner": "0x123...abc"
+    },
+    {
+        "id": "2",
+        "name": "Bored Ape #42",
+        "imageUrl": "/nfts/boredape42.webp",
+        "description": "Un Bored Ape Yacht Club stylé.",
+        "price": "7.2 ETH",
+        "owner": "0x456...def"
+    }
+]
