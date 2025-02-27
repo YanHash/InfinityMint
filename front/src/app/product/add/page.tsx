@@ -23,7 +23,7 @@ export default function ProfileForm() {
     };
 
     return (
-        <div className={"container w-1/2 mx-auto mt-5 justify-items-center text-center"}>
+        <div className={"container w-1/2 mx-auto mt-5 mb-5 justify-items-center text-center"}>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                     <FormLabel>Ajouter une oeuvre sur la marketplace</FormLabel>
