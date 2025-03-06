@@ -1,0 +1,47 @@
+[
+    {
+        "id": "001",
+        "name": "CryptoPunks",
+        "imageUrl": "/nfts/cryptopunk1.webp",
+        "description": "Une collection iconique de 10,000 punks générés de manière algorithmique.",
+        "blockchain": "Ethereum",
+        "contractAddress": "0xABC123...XYZ",
+        "totalSupply": "10000",
+        "floorPrice": "3.2",
+        "volumeTraded": "120K",
+        "owners": "4.5K",
+        "creator": "0xCBA...987",
+        "royalties": "10%",
+        "verified": true
+    },
+    {
+        "id": "002",
+        "name": "Bored Ape Yacht Club",
+        "imageUrl": "/nfts/boredape42.webp",
+        "description": "Une collection exclusive de 10,000 singes uniques sur Ethereum.",
+        "blockchain": "Ethereum",
+        "contractAddress": "0xDEF456...XYZ",
+        "totalSupply": "10000",
+        "floorPrice": "6.8",
+        "volumeTraded": "500K",
+        "owners": "6K",
+        "creator": "0xFED...654",
+        "royalties": "8%",
+        "verified": true
+    },
+    {
+        "id": "003",
+        "name": "Future Felines",
+        "imageUrl": "/nfts/cybercat99.webp",
+        "description": "Une collection futuriste de chats cybernétiques en édition limitée.",
+        "blockchain": "Ethereum",
+        "contractAddress": "0xABC789...XYZ",
+        "totalSupply": "5000",
+        "floorPrice": "4.0",
+        "volumeTraded": "30K",
+        "owners": "2.5K",
+        "creator": "0xCBA...987",
+        "royalties": "10%",
+        "verified": true
+    }
+]
