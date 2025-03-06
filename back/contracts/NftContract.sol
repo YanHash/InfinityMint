@@ -18,7 +18,7 @@ contract NFTContract is ERC721, ERC721Burnable, ERC721URIStorage, Ownable {
 
     constructor() ERC721("InfinityMintNFT","INF") Ownable(msg.sender){}
 
-    uint256 MAX_SUPPLY = 6;
+    uint256 MAX_SUPPLY = 600;
 
     // Cette focntion va permettre de minter un NFT.
     // Elle va permettre de mettre un token sur le wallet de l'utilisateur avec l'adresse en paramètre to

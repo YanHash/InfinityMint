@@ -5,11 +5,18 @@ import { useReadContract, useAccount, useWriteContract, useWaitForTransactionRec
 import { useState, useEffect } from 'react';
 import { config } from './config/config';
 
+import {WriteNFTBlockchain} from  "@/blockchain/components/writeNftBlockchain"
+
+
 export default function Home() {
 
 
   const { address, isConnected } = useAccount();
   const [number, setNumber] = useState<number | null>(null);
+
+  const [nftName,setNftName] = useState<string | null>(null);
+  const [nftDescription,setNftDescription] = useState<string | null>(null);
+  const [nftImageUrl,setNftImageUrl] = useState<string | null>(null);
 
 
   const { data: test, refetch: ok} = useReadContract({
@@ -71,6 +78,7 @@ export default function Home() {
     }
   }, [isSuccess, refetch])
 
+
   const setTheNumber = async() => {
     console.log("passage")
     writeContract({
@@ -80,20 +88,12 @@ export default function Home() {
       args: [address,"name", "description", "image URL","0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"],
       account: address
     })
+
+    
   }
 
 
-  const getTheNumber = async() => {
-    await refetch()
-    console.log(`affichage ${numberGet}`)
-  }
 
-
-  const getTenValue = async() => {
-    await ok();
-    console.log(`Liste de collections :  ${test}`)
-
-  }
 
   return (
     <main className="min-h-screen p-8">
@@ -109,12 +109,26 @@ export default function Home() {
             <div className="space-y-6">
               
               <div className="space-y-4">
-                <button 
-                  onClick={setTheNumber} 
-                  className="w-full px-4 py-3 rounded-lg bg-blue-500 hover:bg-blue-600 disabled:bg-blue-500/50 disabled:cursor-not-allowed transition-all font-medium"
-                >
-                  Mint NFT !
-                </button>
+                <input 
+                  type="text"
+                  onChange={(e) => {setNftName}} 
+                  placeholder="Nom du NFT" 
+                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-gray-200/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                />
+                <input 
+                  type="text"
+                  onChange={(e) => {setNftDescription}} 
+                  placeholder="Description" 
+                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-gray-200/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                />
+                <input 
+                  type="text"
+                  onChange={(e) => {setNftImageUrl}} 
+                  placeholder="Image URL" 
+                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-gray-200/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                />
+                {/* le dernier paramètre correspond à l'adresse du contrat de la marketplace afin de lui autoriser le contrôle */}
+                <WriteNFTBlockchain accountAddress={address} functionName={"safeMint"} argsTab={[address,"name", "description", "image URL","0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"]}></WriteNFTBlockchain>
               </div>
             </div>
           </div>
