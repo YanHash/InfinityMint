@@ -6,22 +6,27 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 
+interface Collection {
+    id: string;
+    name: string;
+    description: string;
+    blockchain: string;
+    floorPrice: number;
+    volumeTraded: number;
+    owners: number;
+    verified: boolean;
+    imageUrl: string;
+    contractAddress: string;
+}
+
 export default function CollectionsPage() {
-    const [collections, setCollections] = useState([]);
-    const [nfts, setNfts] = useState([]);
+    const [collections, setCollections] = useState<Collection[]>([]);
 
     useEffect(() => {
         fetch("/collections.json")
             .then((response) => response.json())
-            .then((data) => setCollections(data))
+            .then((data: Collection[]) => setCollections(data))
             .catch((error) => console.error("Erreur de chargement des collections:", error));
-    }, []);
-
-    useEffect(() => {
-        fetch("/nfts.json")
-            .then((response) => response.json())
-            .then((data) => setNfts(data))
-            .catch((error) => console.error("Erreur de chargement des NFT:", error));
     }, []);
 
     return (

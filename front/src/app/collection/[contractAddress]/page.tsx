@@ -7,12 +7,34 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 
+interface Collection {
+    id: string;
+    name: string;
+    description: string;
+    blockchain: string;
+    floorPrice: number;
+    volumeTraded: number;
+    owners: number;
+    verified: boolean;
+    imageUrl: string;
+    contractAddress: string;
+}
+
+interface NFT {
+    id: string;
+    name: string;
+    description: string;
+    imageUrl: string;
+    price: number;
+    contractAddress: string;
+}
+
 export default function CollectionPage() {
     const params = useParams();
-    const contractAddress = params?.contractAddress;
-    const [collection, setCollection] = useState(null);
-    const [nfts, setNfts] = useState([]);
-    const [isClient, setIsClient] = useState(false);
+    const contractAddress = params?.contractAddress as string;
+    const [collection, setCollection] = useState<Collection | null>(null);
+    const [nfts, setNfts] = useState<NFT[]>([]);
+    const [isClient, setIsClient] = useState<boolean>(false);
 
     useEffect(() => {
         setIsClient(true);
@@ -23,20 +45,16 @@ export default function CollectionPage() {
 
         fetch("/collections.json")
             .then((response) => response.json())
-            .then((data) => {
-                const foundCollection = data.find(
-                    (col) => col.contractAddress === contractAddress
-                );
-                setCollection(foundCollection);
+            .then((data: Collection[]) => {
+                const foundCollection = data.find((col) => col.contractAddress === contractAddress);
+                setCollection(foundCollection || null);
             })
             .catch((error) => console.error("Erreur de chargement des collections:", error));
 
         fetch("/nfts.json")
             .then((response) => response.json())
-            .then((data) => {
-                const filteredNfts = data.filter(
-                    (nft) => nft.contractAddress === contractAddress
-                );
+            .then((data: NFT[]) => {
+                const filteredNfts = data.filter((nft) => nft.contractAddress === contractAddress);
                 setNfts(filteredNfts);
             })
             .catch((error) => console.error("Erreur de chargement des NFT:", error));
