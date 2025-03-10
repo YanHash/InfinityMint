@@ -637,20 +637,36 @@ export const abi = [
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "collectionId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "seller",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "price",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "tokenUri",
+            "type": "string"
+          }
+        ],
+        "internalType": "struct NFTMarketplace.Listing",
+        "name": "listingToRemove",
+        "type": "tuple"
       }
     ],
-    "name": "tokenIdToCollection",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
+    "name": "removeListing",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]
