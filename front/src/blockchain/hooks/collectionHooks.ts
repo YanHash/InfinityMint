@@ -64,11 +64,7 @@ interface Listing {
     tokenUri: String
 }
 
-// Ce hook permet de recupérer les collections dans la blockchain
-// - ---------------------- UTILISATION -------------------------
-// const {collectionList, error, isPending, setSkipCollection} = useGetCollection("userAddress") 
-// A l'instanciation, collectionList va contenir les 10 premières collections
-// Ensuite, il suffit de faire setCollectionList(number) avec number le nombre de collections à ignorer dans la blockchain, collectionList sera donc mis à jour automatiquement
+// Ce hook permet de recupérer les nft d'une collection dans la blockchain
 export const useGetNFTFromCollection = (accountAddress : `0x${string}`, collectionId:string) => {
 
     var [ nftList, setNftList ] = useState<Listing[]>([])
@@ -114,9 +110,7 @@ export const useGetNFTFromCollection = (accountAddress : `0x${string}`, collecti
         
     },[dataNFTFromBlockchain])
 
-    // useEffect(()=>{
-    //     refetch()
-    // },[skipCollection])
-
     return {nftList, error, isPending, refetch}
 }
+
+

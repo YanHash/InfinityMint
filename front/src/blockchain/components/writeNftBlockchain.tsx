@@ -1,34 +1,25 @@
 import { abi, contractAddress } from '@/blockchain/config/configNft';
 import { useEffect, useState } from 'react';
 import { useWriteContract } from "wagmi";
+import { useMintNFT } from '../hooks/nftHooks';
 
-export const WriteNFTBlockchain = ({accountAddress, functionName, argsTab}) => {
-    
-    const { writeContract, isSuccess, isError, error } = useWriteContract();
-      
-    const handleWrite = async () => {
-        try {
-            writeContract({
-              address: contractAddress,
-              abi: abi,
-              functionName: functionName,
-              args: argsTab,
-              account:accountAddress
-            });
-        } catch (err) {
-            console.error('Erreur lors de l\'écriture du contrat:', err);
-        }
+interface PropsT {
+    address: `0x${string}`
+    name: string
+    description : string
+    imageUrl : string
+    attributes : string
+}
+export const WriteNFTBlockchain = ({address, name, description, imageUrl, attributes}:PropsT) => {
+    const {request, isSuccess, isError, error} = useMintNFT("0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199", name, description, imageUrl, attributes)
 
-        console.log("succes : " + isSuccess + "  isError : " + isError + "  error : " + error )
-    };
-      
-    
+    console.log(address)
+
     return (
         <div>
-            <button onClick={handleWrite} className="w-full px-4 py-3 rounded-lg bg-white/5 border border-gray-200/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">Ecrire dans la blockain </button>
+            <button onClick={request} className="w-full px-4 py-3 rounded-lg bg-white/5 border border-gray-200/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">Ecrire dans la blockain </button>
             {isSuccess && <p>Transaction réussie !</p>}
             {isError && <p>Erreur : {error?.message}</p>}
-        </div>
-        
+        </div>  
     );
 }
