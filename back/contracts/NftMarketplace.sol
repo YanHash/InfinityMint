@@ -38,6 +38,9 @@ contract NFTMarketplace {
     // ----------------------- VARIABLES COLLECTION ---------------------------
     // ------------------------------------------------------------------------
 
+    // ------ VOIR POUR MODIFIER listeCollections afin de stocker que les id de collextion pour ensuite aller les chercher dans colletions 
+    // Evite de stocker 2 fois les infos, et on a juste à modifier une fois
+
     // Récuperer une collection en fonction de son id
     mapping(uint256 => Collection) public collections;  // collectionId => Collection
     // Liste contenant toutes les collections
