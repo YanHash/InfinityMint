@@ -126,5 +126,128 @@
             }
         ],
         "verifiedCollection": true
+    },
+    {
+        "id": "4",
+        "name": "Neon Samurai #7",
+        "imageUrl": "/nfts/neonsamurai7.webp",
+        "description": "Un samouraï futuriste avec une armure néon.",
+        "price": "5.9",
+        "owner": "0x321...xyz",
+        "blockchain": "Ethereum",
+        "contractAddress": "0xDEF456...XYZ",
+        "tokenId": "0007",
+        "standard": "ERC-721",
+        "attributes": {
+            "type": "Samurai",
+            "rarity": "Mythique",
+            "weapon": "Katana laser",
+            "background": "Ville cyberpunk"
+        },
+        "creator": "0xAAA...111",
+        "royalties": "7%",
+        "listingType": "Enchères",
+        "highestBid": "5.5",
+        "lastSalePrice": "5.2",
+        "marketplaceFees": "2%",
+        "history": [
+            {
+                "event": "Mint",
+                "from": "0x000...000",
+                "to": "0xAAA...111",
+                "price": "0",
+                "date": "2024-03-01"
+            },
+            {
+                "event": "Vente",
+                "from": "0xAAA...111",
+                "to": "0x321...xyz",
+                "price": "5.2",
+                "date": "2024-03-08"
+            }
+        ],
+        "verifiedCollection": true
+    },
+    {
+        "id": "5",
+        "name": "Mecha Dragon #15",
+        "imageUrl": "/nfts/mechadragon15.webp",
+        "description": "Un dragon mécanique aux ailes cybernétiques.",
+        "price": "8.4",
+        "owner": "0x654...def",
+        "blockchain": "Ethereum",
+        "contractAddress": "0xABC123...XYZ",
+        "tokenId": "0015",
+        "standard": "ERC-721",
+        "attributes": {
+            "type": "Dragon",
+            "rarity": "Légendaire",
+            "element": "Feu",
+            "background": "Ciel étoilé"
+        },
+        "creator": "0xBBB...222",
+        "royalties": "9%",
+        "listingType": "Prix fixe",
+        "highestBid": "8.1",
+        "lastSalePrice": "7.9",
+        "marketplaceFees": "2.5%",
+        "history": [
+            {
+                "event": "Mint",
+                "from": "0x000...000",
+                "to": "0xBBB...222",
+                "price": "0",
+                "date": "2024-02-20"
+            },
+            {
+                "event": "Vente",
+                "from": "0xBBB...222",
+                "to": "0x654...def",
+                "price": "7.9",
+                "date": "2024-03-05"
+            }
+        ],
+        "verifiedCollection": true
+    },
+    {
+        "id": "6",
+        "name": "Shadow Ninja #21",
+        "imageUrl": "/nfts/shadowninja21.webp",
+        "description": "Un ninja furtif enveloppé dans une cape d’ombre.",
+        "price": "6.3",
+        "owner": "0x987...ghi",
+        "blockchain": "Ethereum",
+        "contractAddress": "0xDEF456...XYZ",
+        "tokenId": "0021",
+        "standard": "ERC-721",
+        "attributes": {
+            "type": "Ninja",
+            "rarity": "Épique",
+            "weapon": "Shuriken en énergie",
+            "background": "Forêt sombre"
+        },
+        "creator": "0xCCC...333",
+        "royalties": "8%",
+        "listingType": "Enchères",
+        "highestBid": "6.0",
+        "lastSalePrice": "5.7",
+        "marketplaceFees": "2%",
+        "history": [
+            {
+                "event": "Mint",
+                "from": "0x000...000",
+                "to": "0xCCC...333",
+                "price": "0",
+                "date": "2024-02-28"
+            },
+            {
+                "event": "Vente",
+                "from": "0xCCC...333",
+                "to": "0x987...ghi",
+                "price": "5.7",
+                "date": "2024-03-06"
+            }
+        ],
+        "verifiedCollection": true
     }
 ]
