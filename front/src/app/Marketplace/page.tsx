@@ -266,7 +266,7 @@ export default function Home() {
             </div>
 
             <div>
-              <GetNFTToCollectionFromBlockchain accountAddress={address} functionName={"getNFTFromCollectionId"} argsTab={["51247926887182079427686341912751305632215478829014104717861453362617625329240"]}></GetNFTToCollectionFromBlockchain>
+              <GetNFTToCollectionFromBlockchain accountAddress={address} collectionId="51247926887182079427686341912751305632215478829014104717861453362617625329240"></GetNFTToCollectionFromBlockchain>
             </div>
             
           </div>

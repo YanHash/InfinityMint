@@ -57,3 +57,66 @@ export const useGetCollection = (accountAddress : `0x${string}`) => {
 }
 
 
+interface Listing {
+    collectionId: string
+    seller: `0x${string}`
+    price: number
+    tokenUri: String
+}
+
+// Ce hook permet de recupérer les collections dans la blockchain
+// - ---------------------- UTILISATION -------------------------
+// const {collectionList, error, isPending, setSkipCollection} = useGetCollection("userAddress") 
+// A l'instanciation, collectionList va contenir les 10 premières collections
+// Ensuite, il suffit de faire setCollectionList(number) avec number le nombre de collections à ignorer dans la blockchain, collectionList sera donc mis à jour automatiquement
+export const useGetNFTFromCollection = (accountAddress : `0x${string}`, collectionId:string) => {
+
+    var [ nftList, setNftList ] = useState<Listing[]>([])
+
+    const { data: dataNFTFromBlockchain, error, isPending: isPending, refetch } = useReadContract({
+        abi,
+        address: contractAddress,
+        functionName: "getNFTFromCollectionId",
+        args: [collectionId],
+        account: accountAddress,
+    });
+
+    const base64Modif = (valeur:String) => {
+        const base64String = valeur.split(",")[1];
+        
+        // Décoder la chaîne Base64
+        const decodedString = atob(base64String);
+
+        // Convertir la chaîne JSON en objet JavaScript
+        const jsonObject = JSON.parse(decodedString);
+
+
+        return decodedString
+    }
+
+    useEffect(()=>{
+
+        let nftListNew: Listing[] = [];
+        if (Array.isArray(dataNFTFromBlockchain)) {
+            dataNFTFromBlockchain.forEach(item => {
+                nftListNew.push(item)
+            });
+
+            nftListNew.map((value)=>{
+                value.tokenUri = base64Modif(value.tokenUri)
+            })
+
+            setNftList(nftListNew)
+
+            console.log("hook récupere la valeur : " +  nftList.length)
+        }
+
+        
+    },[dataNFTFromBlockchain])
+
+    // useEffect(()=>{
+    //     refetch()
+    // },[skipCollection])
+
+    return {nftList, error, isPending, refetch}
+}
