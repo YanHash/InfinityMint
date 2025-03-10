@@ -22,7 +22,7 @@ contract NFTContract is ERC721, ERC721Burnable, ERC721URIStorage, Ownable {
 
     // Cette focntion va permettre de minter un NFT.
     // Elle va permettre de mettre un token sur le wallet de l'utilisateur avec l'adresse en paramètre to
-    function safeMint(address to, string memory name, string memory description, string memory imageUrl, address marketplace) public { //public onlyOwner{
+    function safeMint(address to, string memory name, string memory description, string memory imageUrl, string memory attributes, address marketplace) public { //public onlyOwner{
         // Le compteur vérifie le numéro de jeton actuel
         // On récupére le numéro de token suivant
         uint256 tokenId = _tokenIdCounter;
@@ -38,7 +38,7 @@ contract NFTContract is ERC721, ERC721Burnable, ERC721URIStorage, Ownable {
         _safeMint(to, tokenId);
 
         // On va créer l'uri du NFT
-        string memory itemUri = getTokenURI(tokenId,name, description, imageUrl);
+        string memory itemUri = getTokenURI(name, description, imageUrl, attributes);
 
         //On va ajouter l'uri personalisé au NFT minté
         _setTokenURI(tokenId, itemUri);
@@ -68,12 +68,13 @@ contract NFTContract is ERC721, ERC721Burnable, ERC721URIStorage, Ownable {
     }
 
     // Cette fonction permet de générer le token URI pour avoir les informations personalisé du NFT
-    function getTokenURI(uint256 tokenId, string memory name, string memory description, string memory imageUrl) public pure returns (string memory){
+    function getTokenURI(string memory name, string memory description, string memory imageUrl, string memory attributes) public pure returns (string memory){
         bytes memory dataURI = abi.encodePacked(
             '{',
             '"name": "', name, '",',
             '"description": "', description, '",',
             '"image": "', imageUrl, '"',
+            '"attributes": "', attributes, '"',
         '}'
         );
         return string(

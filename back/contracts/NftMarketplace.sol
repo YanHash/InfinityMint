@@ -32,8 +32,6 @@ contract NFTMarketplace {
         string tokenUri;
     }
 
-    
-
     // ------------------------------------------------------------------------
     // ----------------------- VARIABLES COLLECTION ---------------------------
     // ------------------------------------------------------------------------
@@ -54,7 +52,6 @@ contract NFTMarketplace {
 
 
     mapping(address => mapping(uint256 => Listing)) public listings;  // (NFT contract => (Token ID => Listing))
-    mapping(uint256 => uint256) public tokenIdToCollection; // (Token ID => Collection ID)
     mapping(uint256 => Listing[]) public collectionToNFTs; // (Collection ID => list of Token IDs)
 
     Listing[] public horsCollection;
@@ -116,10 +113,38 @@ contract NFTMarketplace {
         console.log("on commence a :" , indexStart);
 
         for (uint i = indexStart; i < length; i++) {
-            retour[i] = listeCollections[i]; // Affectation directe
+            retour[i] = collections[listeCollections[i].collectionId]; // Affectation directe. On recupere la valeur du mapping car elle est à jour
         }
 
         return retour;
+    }
+
+
+    function removeListing( Listing memory listingToRemove) public {
+        int256 index = findListingIndex(listingToRemove.collectionId, listingToRemove);
+        require(index >= 0, "Listing not found");
+
+        uint256 idx = uint256(index); // Convertir en uint256
+
+        // Remplace l'élément à supprimer par le dernier élément (swap & pop)
+        collectionToNFTs[listingToRemove.collectionId][idx] = collectionToNFTs[listingToRemove.collectionId][collectionToNFTs[listingToRemove.collectionId].length - 1];
+
+        // Supprime le dernier élément du tableau
+        collectionToNFTs[listingToRemove.collectionId].pop();
+    }
+
+    function findListingIndex(uint256 collectionId ,Listing memory listingToFind) internal view returns (int256) {
+        for (uint256 i = 0; i < collectionToNFTs[collectionId].length; i++) {
+            if (
+                collectionToNFTs[collectionId][i].collectionId == listingToFind.collectionId &&
+                collectionToNFTs[collectionId][i].seller == listingToFind.seller &&
+                collectionToNFTs[collectionId][i].price == listingToFind.price &&
+                keccak256(abi.encodePacked(collectionToNFTs[collectionId][i].tokenUri)) == keccak256(abi.encodePacked(listingToFind.tokenUri))
+            ) {
+                return int256(i); // Retourne l'index si trouvé
+            }
+        }
+        return -1; // Retourne -1 si non trouvé
     }
 
     // Fonction pour créer une collection
@@ -142,7 +167,6 @@ contract NFTMarketplace {
         Collection memory newCollection = Collection(0, address(this), "InfinityMint", "InfinityMint", 0);
         addCollection(newCollection);
     }
-
 
     // Fonction pour lister un NFT sur le marketplace
     function listNFT(address nftContract, uint256 tokenId, uint256 price, uint256 collectionId) external{
@@ -225,8 +249,12 @@ contract NFTMarketplace {
         IERC721(nftContract).safeTransferFrom(listing.seller, msg.sender, tokenId);
 
         if(listing.collectionId != 0){
-          // on le supprime de la collection  
-          //removeNumberByValue(collectionToNFTs[listing.collectionId], tokenId);
+            // on le supprime de la collection  
+
+            removeListing(listing);
+
+            // On augmente le volume de d'argent depensé pour la collection
+            collections[listing.collectionId].totalSupply = collections[listing.collectionId].totalSupply + listing.price;
         } 
 
         emit NFTSold(nftContract, tokenId, msg.sender, listing.price);
@@ -245,11 +273,6 @@ contract NFTMarketplace {
         // On emet un evenement sur la blockchain
         emit ListingCanceled(nftContract, tokenId, msg.sender);
     }
-
-    // // Fonction pour obtenir les NFTs dans une collection
-    // function getNFTsInCollection(uint256 collectionId) external view returns (uint256[] memory) {
-    //     return collectionToNFTs[collectionId];
-    // }
 
     // Cette fonction va permettre de récupérer l'uri d'un NFT Spéifique
     function getTokenUriNFT(address nftContract, uint256 tokenId) external view returns (string memory) {
