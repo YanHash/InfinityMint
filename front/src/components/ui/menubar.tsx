@@ -6,8 +6,8 @@ import { Check, ChevronRight, Circle } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
-import {Avatar, AvatarFallback, AvatarImage,} from "@/components/ui/avatar"
-import {useRouter} from 'next/navigation'
+import { Avatar, AvatarFallback, AvatarImage, } from "@/components/ui/avatar"
+import { useRouter } from 'next/navigation'
 
 function MenubarMenu({
   ...props
@@ -55,17 +55,17 @@ const Menubar = React.forwardRef<
 Menubar.displayName = MenubarPrimitive.Root.displayName
 
 const MenubarMain = React.forwardRef<
-    React.ElementRef<typeof MenubarPrimitive.Root>,
-    React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Root>
->(({className, ...props}, ref) => (
-    <MenubarPrimitive.Root
-        ref={ref}
-        className={cn(
-            "flex h-9 items-center space-x-1 rounded-md border bg-background p-1 shadow-sm",
-            className
-        )}
-        {...props}
-    />
+  React.ElementRef<typeof MenubarPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Root>
+>(({ className, ...props }, ref) => (
+  <MenubarPrimitive.Root
+    ref={ref}
+    className={cn(
+      "flex h-9 items-center space-x-1 rounded-md border bg-background p-1 shadow-sm",
+      className
+    )}
+    {...props}
+  />
 ))
 MenubarMain.displayName = "MenubarMain"
 
@@ -256,46 +256,46 @@ const MenubarShortcut = ({
 MenubarShortcut.displayname = "MenubarShortcut"
 
 const MainMenubar = () => {
-    const router = useRouter()
+  const router = useRouter()
 
-    return (
-        <Menubar>
-            <MenubarMenu>
-                <MenubarTrigger onClick={() => router.push('/')}>Accueil</MenubarTrigger>
-            </MenubarMenu>
-            <MenubarMenu>
-                <MenubarTrigger onClick={() => router.push('/products')}>Découvrir</MenubarTrigger>
-            </MenubarMenu>
-            <MenubarMenu>
-                <MenubarTrigger>NFT</MenubarTrigger>
-                <MenubarContent>
-                    <MenubarItem>
-                        Ajouter une NFT
-                    </MenubarItem>
-                    <MenubarItem disabled>Expertiser une NFT</MenubarItem>
-                    <MenubarSeparator/>
-                    <MenubarSub>
-                        <MenubarSubTrigger>Partager</MenubarSubTrigger>
-                        <MenubarSubContent>
-                            <MenubarItem>Facebook</MenubarItem>
-                            <MenubarItem>X</MenubarItem>
-                        </MenubarSubContent>
-                    </MenubarSub>
-                    <MenubarSeparator/>
-                </MenubarContent>
-            </MenubarMenu>
-            <MenubarMenu>
-                <div className={"w-full"}>
-                    <MenubarTrigger className={"ml-auto"}>
-                        <Avatar>
-                            <AvatarImage src="https://github.com/shadcn.png"/>
-                            <AvatarFallback>CN</AvatarFallback>
-                        </Avatar>
-                    </MenubarTrigger>
-                </div>
-            </MenubarMenu>
-        </Menubar>
-    )
+  return (
+    <Menubar>
+      <MenubarMenu>
+        <MenubarTrigger onClick={() => router.push('/')}>Accueil</MenubarTrigger>
+      </MenubarMenu>
+      <MenubarMenu>
+        <MenubarTrigger onClick={() => router.push('/collection')}>Découvrir</MenubarTrigger>
+      </MenubarMenu>
+      <MenubarMenu>
+        <MenubarTrigger>NFT</MenubarTrigger>
+        <MenubarContent>
+          <MenubarItem>
+            Ajouter une NFT
+          </MenubarItem>
+          <MenubarItem disabled>Expertiser une NFT</MenubarItem>
+          <MenubarSeparator />
+          <MenubarSub>
+            <MenubarSubTrigger>Partager</MenubarSubTrigger>
+            <MenubarSubContent>
+              <MenubarItem>Facebook</MenubarItem>
+              <MenubarItem>X</MenubarItem>
+            </MenubarSubContent>
+          </MenubarSub>
+          <MenubarSeparator />
+        </MenubarContent>
+      </MenubarMenu>
+      <MenubarMenu>
+        <div className={"w-full"}>
+          <MenubarTrigger className={"ml-auto"}>
+            <Avatar>
+              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+          </MenubarTrigger>
+        </div>
+      </MenubarMenu>
+    </Menubar>
+  )
 }
 MenubarShortcut.displayname = "MainMenubar"
 
