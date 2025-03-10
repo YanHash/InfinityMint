@@ -241,10 +241,14 @@ contract NFTMarketplace {
         require(listing.price > 0, "NFT not for sale");
         require(msg.value >= listing.price, "Insufficient payment");
 
+        uint256 fee = listing.price*0.1 ether;
+        uint256 amountForSeller = listing.price*0.9 ether ;
         
         delete listings[nftContract][tokenId];
 
-        payable(listing.seller).transfer(msg.value);
+        payable(listing.seller).transfer(amountForSeller);
+        payable(address(this)).transfer(fee);
+
 
         IERC721(nftContract).safeTransferFrom(listing.seller, msg.sender, tokenId);
 
@@ -256,6 +260,11 @@ contract NFTMarketplace {
             // On augmente le volume de d'argent depensé pour la collection
             collections[listing.collectionId].totalSupply = collections[listing.collectionId].totalSupply + listing.price;
         } 
+        else {
+            // ************** TODO ******************
+            // On doit l'éffacer des hors série
+            
+        }
 
         emit NFTSold(nftContract, tokenId, msg.sender, listing.price);
     }
