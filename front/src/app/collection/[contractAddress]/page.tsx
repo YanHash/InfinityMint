@@ -8,7 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useAccount } from "wagmi";
 import { useGetNFTFromCollection } from "@/hooks/useGetNFTFromCollection";
-import { formatAddress } from "../../../src/utils/format";
+import { formatAddress } from "../../../utils/format";
 
 
 interface NFT {
