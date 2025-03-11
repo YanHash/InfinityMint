@@ -11,9 +11,7 @@ interface PropsT {
     attributes : string
 }
 export const WriteNFTBlockchain = ({address, name, description, imageUrl, attributes}:PropsT) => {
-    const {request, isSuccess, isError, error} = useMintNFT("0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199", name, description, imageUrl, attributes)
-
-    console.log(address)
+    const {request, isSuccess, isError, error} = useMintNFT(address, name, description, imageUrl, attributes)
 
     return (
         <div>

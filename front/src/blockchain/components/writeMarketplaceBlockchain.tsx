@@ -1,7 +1,7 @@
 import { abi, contractAddress } from '@/blockchain/config/configMarketplace';
 import { useEffect, useState } from 'react';
 import { useWriteContract } from "wagmi";
-import { useBuyNFT, useListNFT } from '../hooks/marketplaceHook';
+import { useBuyNFT, useCreateCollection, useListNFT } from '../hooks/marketplaceHook';
 
 interface Props {
     accountAddress: `0x${string}` | undefined
@@ -37,6 +37,26 @@ export const WriteMarketplaceBlockchainBuyNFT = ({accountAddress, tokenId, price
     return (
         <div>
             <button onClick={request} className="w-full px-4 py-3 rounded-lg bg-white/5 border border-gray-200/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">Ecrire dans la blockain </button>
+            {isSuccess && <p>Transaction réussie !</p>}
+            {isError && <p>Erreur : {error?.message}</p>}
+        </div>
+        
+    );
+}
+
+
+interface PropsCreateCollection {
+    accountAddress: `0x${string}` | undefined
+    name: string
+    description : string
+}
+export const WriteMarketplaceBlockchainCreateCollection = ({accountAddress, name, description }:PropsCreateCollection) => {
+
+    const {request, isSuccess, isError, error} = useCreateCollection(accountAddress,name, description)
+    
+    return (
+        <div>
+            <button onClick={request} className="w-full px-4 py-3 rounded-lg bg-white/5 border border-gray-200/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">Ecrire dans la blockain (create Collection) </button>
             {isSuccess && <p>Transaction réussie !</p>}
             {isError && <p>Erreur : {error?.message}</p>}
         </div>

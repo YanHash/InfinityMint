@@ -51,8 +51,12 @@ export const GetCollectionFromBlockchain = ({ accountAddress }:Props) => {
     );
 };
 
+interface PropsNFTFromCollection {
+    accountAddress : `0x${string}` | undefined
+    collectionId : string
+}
 
-export const GetNFTToCollectionFromBlockchain = ({ accountAddress, functionName, collectionId }:Props) => {
+export const GetNFTToCollectionFromBlockchain = ({ accountAddress, collectionId }:PropsNFTFromCollection) => {
     
     const {nftList, error, isPending, refetch } = useGetNFTFromCollection(accountAddress,collectionId)
 
