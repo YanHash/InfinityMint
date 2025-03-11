@@ -14,14 +14,24 @@ interface Collection {
     totalSupply: number
 }
 
-interface RetourCollectionHooks {
-    collectionList: Collection[],
-    error: ReadContractErrorType | null
-    isPending: boolean
-    setSkipCollection : Dispatch<SetStateAction<number>>
-}
 
-export const useCreateCollection = (accountAddress : `0x${string}`) => {
+export const useCreateCollection = (accountAddress : `0x${string}` | undefined, name:string, description : string) => {
+
+    const { writeContract, isSuccess, isError, error } = useWriteContract();
+    
+    const request = () => {
+
+        writeContract({
+            address: contractAddress,
+            abi: abi,
+            functionName: "createCollection",
+            args: [ name, description ],
+            account:accountAddress,
+        });
+
+    }
+
+    return {request, isSuccess, isError, error}
 
 }
 
@@ -33,7 +43,7 @@ export const useCreateCollection = (accountAddress : `0x${string}`) => {
 export const useGetCollection = (accountAddress : `0x${string}`) => {
 
     const [ skipCollection, setSkipCollection ] = useState<number>(0)
-    var [ collectionList, setCollectionList ] = useState<Collection[]>([])
+    const [ collectionList, setCollectionList ] = useState<Collection[]>([])
 
     const { data: dataCollectionFromBlockchain, error, isPending: isPending, refetch } = useReadContract({
         abi,
@@ -57,10 +67,13 @@ export const useGetCollection = (accountAddress : `0x${string}`) => {
     },[dataCollectionFromBlockchain])
 
     useEffect(()=>{
+        console.log("Passage dans skipCollection");
         refetch()
     },[skipCollection])
 
-    return {collectionList, error, isPending, setSkipCollection}
+
+
+    return {collectionList, error, isPending, setSkipCollection, refetch}
 }
 
 
@@ -72,7 +85,7 @@ interface Listing {
 }
 
 // Ce hook permet de recupérer les nft d'une collection dans la blockchain
-export const useGetNFTFromCollection = (accountAddress : `0x${string}`, collectionId:string) => {
+export const useGetNFTFromCollection = (accountAddress : `0x${string}` | undefined, collectionId:string) => {
 
     var [ nftList, setNftList ] = useState<Listing[]>([])
 
@@ -200,6 +213,7 @@ export const useGetNFTHorsSerie = (accountAddress : `0x${string}` | undefined) =
 } 
 
 // Cette fonction va permettre de faire un achat de NFT
+// ERROR !!!!!!!!!!
 export const useBuyNFT  = (accountAddress : `0x${string}` | undefined, tokenId: string, price : string) => {
     const { writeContract, isSuccess, isError, error } = useWriteContract();
     

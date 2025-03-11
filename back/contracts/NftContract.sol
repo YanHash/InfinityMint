@@ -38,7 +38,7 @@ contract NFTContract is ERC721, ERC721Burnable, ERC721URIStorage, Ownable {
         _safeMint(msg.sender, tokenId);
 
         // On va créer l'uri du NFT
-        string memory itemUri = getTokenURI(name, description, imageUrl, attributes);
+        string memory itemUri = getTokenURI(tokenId, name, description, imageUrl, attributes);
 
         //On va ajouter l'uri personalisé au NFT minté
         _setTokenURI(tokenId, itemUri);
@@ -68,9 +68,10 @@ contract NFTContract is ERC721, ERC721Burnable, ERC721URIStorage, Ownable {
     }
 
     // Cette fonction permet de générer le token URI pour avoir les informations personalisé du NFT
-    function getTokenURI(string memory name, string memory description, string memory imageUrl, string memory attributes) public pure returns (string memory){
+    function getTokenURI(uint256 tokenId,string memory name, string memory description, string memory imageUrl, string memory attributes) public pure returns (string memory){
         bytes memory dataURI = abi.encodePacked(
             '{',
+            '"tokenId": "', tokenId, '",',
             '"name": "', name, '",',
             '"description": "', description, '",',
             '"image": "', imageUrl, '"',

@@ -1,14 +1,11 @@
 "use client";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { abi, contractAddress } from "@/app/Marketplace/constants/index";
 import {
   useAccount,
 } from "wagmi";
 import { useState } from "react";
-import { parseEther } from "viem/utils";
 
-import { WriteContractBlockain, App } from "@/blockchain/marketplace";
-import { WriteMarketplaceBlockchainBuyNFT, WriteMarketplaceBlockchainListNFT } from "@/blockchain/components/writeMarketplaceBlockchain";
+import { WriteMarketplaceBlockchainBuyNFT, WriteMarketplaceBlockchainCreateCollection, WriteMarketplaceBlockchainListNFT } from "@/blockchain/components/writeMarketplaceBlockchain";
 import {
   GetCollectionFromBlockchain,
   GetNFTHorsSerieFromBlockchain,
@@ -22,14 +19,8 @@ export default function Home() {
   const [tokenIdNft, setTokenIdNft] = useState<string | null>(null);
   const [price, setPrice] = useState<string | null>(null);
   const [collectionId, setCollectionId] = useState<string>("0");
-
-  const [nftContractBuy, setNftContractBuy] = useState<string | null>(null);
-  const [tokenIdNftBuy, setTokenIdNftBuy] = useState<string | null>(null);
-
   const [collectionName, setCollectionName] = useState<string | null>(null);
-  const [collectionDescription, setCollectionDescription] = useState<
-    string | null
-  >(null);
+  const [collectionDescription, setCollectionDescription] = useState<string | null>(null);
 
   return (
     <main className="min-h-screen p-8">
@@ -172,16 +163,14 @@ export default function Home() {
                     className="w-full px-4 py-3 rounded-lg bg-white/5 border border-gray-200/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                   />
 
-                  <WriteContractBlockain
+                  <WriteMarketplaceBlockchainCreateCollection
                     accountAddress={address as `0x${string}`}
-                    functionName={"createCollection"}
-                    argsTab={[collectionName, collectionDescription]}
-                  ></WriteContractBlockain>
+                    name={collectionName ?? ""}
+                    description={collectionDescription ?? ""}
+                  ></WriteMarketplaceBlockchainCreateCollection>
                   <div>
                     <GetCollectionFromBlockchain
                       accountAddress={address as `0x${string}`}
-                      functionName={"getTenCollections"}
-                      collectionId={"0"}
                     ></GetCollectionFromBlockchain>
                   </div>
                 </div>
@@ -191,7 +180,6 @@ export default function Home() {
                 <GetNFTToCollectionFromBlockchain
                   accountAddress={address as `0x${string}`}
                   collectionId="9430611854563446828391886019777627856093821975079941606568823989226042250080"
-                  functionName={""}
                 ></GetNFTToCollectionFromBlockchain>
               </div>
 
