@@ -1,6 +1,3 @@
-import { abi, contractAddress } from '@/blockchain/config/configMarketplace';
-import { useEffect, useState } from 'react';
-import { useWriteContract } from "wagmi";
 import { useBuyNFT, useCreateCollection, useListNFT } from '../hooks/marketplaceHook';
 
 interface Props {

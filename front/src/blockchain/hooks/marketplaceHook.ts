@@ -14,12 +14,6 @@ interface Collection {
     totalSupply: number
 }
 
-interface RetourCollectionHooks {
-    collectionList: Collection[],
-    error: ReadContractErrorType | null
-    isPending: boolean
-    setSkipCollection : Dispatch<SetStateAction<number>>
-}
 
 export const useCreateCollection = (accountAddress : `0x${string}` | undefined, name:string, description : string) => {
 

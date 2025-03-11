@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { useReadContract, useWriteContract } from "wagmi";
+import { useWriteContract } from "wagmi";
 import { abi,contractAddress } from "../config/configNft";
 
 import { contractAddress as contractAddressMarketplace} from "../config/configMarketplace";

@@ -1,6 +1,3 @@
-import { abi, contractAddress } from '@/blockchain/config/configNft';
-import { useEffect, useState } from 'react';
-import { useWriteContract } from "wagmi";
 import { useMintNFT } from '../hooks/nftHooks';
 
 interface PropsT {

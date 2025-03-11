@@ -171,8 +171,6 @@ export default function Home() {
                   <div>
                     <GetCollectionFromBlockchain
                       accountAddress={address as `0x${string}`}
-                      functionName={"getTenCollections"}
-                      collectionId={"0"}
                     ></GetCollectionFromBlockchain>
                   </div>
                 </div>
@@ -182,7 +180,6 @@ export default function Home() {
                 <GetNFTToCollectionFromBlockchain
                   accountAddress={address as `0x${string}`}
                   collectionId="9430611854563446828391886019777627856093821975079941606568823989226042250080"
-                  functionName={""}
                 ></GetNFTToCollectionFromBlockchain>
               </div>
 

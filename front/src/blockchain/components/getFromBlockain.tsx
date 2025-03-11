@@ -1,25 +1,14 @@
-import { useReadContract } from "wagmi";
-import { abi, contractAddress } from '@/blockchain/config/configMarketplace';
 import { useEffect, useState } from "react";
 import { useGetCollection, useGetNFTFromCollection, useGetNFTHorsSerie, useGetUserInformations } from "../hooks/marketplaceHook";
 
-interface Props {
+interface PropsGetCollection {
     accountAddress: `0x${string}`
-    functionName: string
-    collectionId: string
 }
 
-export const GetCollectionFromBlockchain = ({ accountAddress }:Props) => {
+
+export const GetCollectionFromBlockchain = ({ accountAddress }:PropsGetCollection) => {
 
     const {collectionList, error, isPending, setSkipCollection} = useGetCollection(accountAddress)
-
-
-    interface Collection {
-        collectionId: string
-        owner : `0x${string}`
-        description: string
-        totalSupply: number
-    }
 
     useEffect(()=>{console.log("changement de la collectionList : " + collectionList.length)},[collectionList])
 
