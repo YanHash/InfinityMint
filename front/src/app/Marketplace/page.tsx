@@ -1,17 +1,39 @@
 "use client";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import {
-  useAccount,
-} from "wagmi";
+import { useAccount } from "wagmi";
 import { useState } from "react";
 
-import { WriteMarketplaceBlockchainBuyNFT, WriteMarketplaceBlockchainCreateCollection, WriteMarketplaceBlockchainListNFT } from "@/blockchain/components/writeMarketplaceBlockchain";
+import {
+  WriteMarketplaceBlockchainBuyNFT,
+  WriteMarketplaceBlockchainCreateCollection,
+  WriteMarketplaceBlockchainListNFT,
+} from "@/blockchain/components/writeMarketplaceBlockchain";
 import {
   GetCollectionFromBlockchain,
   GetNFTHorsSerieFromBlockchain,
   GetNFTToCollectionFromBlockchain,
   GetUserInformationsFromBlockchain,
 } from "@/blockchain/components/getFromBlockain";
+
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
+
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const { address, isConnected } = useAccount();
@@ -20,191 +42,48 @@ export default function Home() {
   const [price, setPrice] = useState<string | null>(null);
   const [collectionId, setCollectionId] = useState<string>("0");
   const [collectionName, setCollectionName] = useState<string | null>(null);
-  const [collectionDescription, setCollectionDescription] = useState<string | null>(null);
+  const [collectionDescription, setCollectionDescription] = useState<
+    string | null
+  >(null);
 
   return (
-    <main className="min-h-screen p-8">
-        <div className="flex justify-end mb-8">
-          <ConnectButton />
-        </div>
-        {isConnected ? (
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-gray-200/20">
-            <h1 className="text-2xl font-bold mb-6 text-center">Buy NFT</h1>
-
-            <div className="space-y-6">
-              <div className="space-y-4">
-
-                <input
-                  type="text"
-                  onChange={(e) => {
-                    setTokenIdNft(e.target.value);
-                  }}
-                  placeholder="Token ID"
-                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-gray-200/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                />
-
-                <input
-                  type="text"
-                  onChange={(e) => {
-                    setPrice((e.target.value));
-                  }}
-                  placeholder="Price"
-                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-gray-200/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                />
-
-                <WriteMarketplaceBlockchainBuyNFT
-                  accountAddress={address as `0x${string}`}
-                  tokenId={tokenIdNft ?? ""}
-                  price={price?.toString() ?? "100"}
-                ></WriteMarketplaceBlockchainBuyNFT>
+    <div className="flex items-center justify-center h-screen">
+      <Card className="w-3/4">
+        <CardHeader>
+          <CardTitle>Create project</CardTitle>
+          <CardDescription>
+            Deploy your new project in one-click.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form>
+            <div className="grid w-full items-center gap-4">
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="name">Name</Label>
+                <Input id="name" placeholder="Name of your project" />
+              </div>
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="framework">Framework</Label>
+                <Select>
+                  <SelectTrigger id="framework">
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent position="popper">
+                    <SelectItem value="next">Next.js</SelectItem>
+                    <SelectItem value="sveltekit">SvelteKit</SelectItem>
+                    <SelectItem value="astro">Astro</SelectItem>
+                    <SelectItem value="nuxt">Nuxt.js</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
-          </div>
-        ) : (
-          <div className="text-center mt-20">
-            <h2 className="text-xl font-semibold mb-4">
-              Welcome to Simple Storage DApp
-            </h2>
-            <p className="text-gray-400">
-              Please connect your wallet to interact with the blockchain.
-            </p>
-          </div>
-        )}
-
-
-
-
-
-      <div className="max-w-2xl mx-auto">
-        <div className="flex justify-end mb-8">
-          <ConnectButton />
-        </div>
-        {isConnected ? (
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-gray-200/20">
-            <h1 className="text-2xl font-bold mb-6 text-center">List NFT</h1>
-
-            <div className="space-y-6">
-              <div className="space-y-4">
-
-                <input
-                  type="text"
-                  onChange={(e) => {
-                    setTokenIdNft(e.target.value);
-                  }}
-                  placeholder="Token ID"
-                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-gray-200/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                />
-
-                <input
-                  type="text"
-                  onChange={(e) => {
-                    setPrice((e.target.value));
-                  }}
-                  placeholder="Price"
-                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-gray-200/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                />
-
-                <input
-                  type="text"
-                  onChange={(e) => {
-                    setCollectionId(e.target.value);
-                  }}
-                  placeholder="collectionId"
-                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-gray-200/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                />
-
-                <WriteMarketplaceBlockchainListNFT
-                  accountAddress={address as `0x${string}`}
-                  tokenId={tokenIdNft ?? ""}
-                  price={price?.toString() ?? "10"}
-                  collectionId={collectionId}
-                ></WriteMarketplaceBlockchainListNFT>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="text-center mt-20">
-            <h2 className="text-xl font-semibold mb-4">
-              Welcome to Simple Storage DApp
-            </h2>
-            <p className="text-gray-400">
-              Please connect your wallet to interact with the blockchain.
-            </p>
-          </div>
-        )}
-
-        <div className="max-w-2xl mx-auto">
-          <div className="flex justify-end mb-8">
-            <ConnectButton />
-          </div>
-          {isConnected ? (
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-gray-200/20">
-              <h1 className="text-2xl font-bold mb-6 text-center">
-                Create Collection
-              </h1>
-
-              <div className="space-y-6">
-                <div className="space-y-4">
-                  <input
-                    type="text"
-                    onChange={(e) => {
-                      setCollectionName(e.target.value);
-                    }}
-                    placeholder="Name"
-                    className="w-full px-4 py-3 rounded-lg bg-white/5 border border-gray-200/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                  />
-
-                  <input
-                    type="text"
-                    onChange={(e) => {
-                      setCollectionDescription(e.target.value);
-                    }}
-                    placeholder="description"
-                    className="w-full px-4 py-3 rounded-lg bg-white/5 border border-gray-200/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                  />
-
-                  <WriteMarketplaceBlockchainCreateCollection
-                    accountAddress={address as `0x${string}`}
-                    name={collectionName ?? ""}
-                    description={collectionDescription ?? ""}
-                  ></WriteMarketplaceBlockchainCreateCollection>
-                  <div>
-                    <GetCollectionFromBlockchain
-                      accountAddress={address as `0x${string}`}
-                    ></GetCollectionFromBlockchain>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <GetNFTToCollectionFromBlockchain
-                  accountAddress={address as `0x${string}`}
-                  collectionId="9430611854563446828391886019777627856093821975079941606568823989226042250080"
-                ></GetNFTToCollectionFromBlockchain>
-              </div>
-
-              <div>
-                <GetNFTHorsSerieFromBlockchain
-                  accountAddress={address as `0x${string}`}
-                ></GetNFTHorsSerieFromBlockchain>
-              </div>
-
-              <div>
-                <GetUserInformationsFromBlockchain accountAddress={address as `0x${string}`}></GetUserInformationsFromBlockchain>
-              </div>
-            </div>
-          ) : (
-            <div className="text-center mt-20">
-              <h2 className="text-xl font-semibold mb-4">
-                Welcome to Simple Storage DApp
-              </h2>
-              <p className="text-gray-400">
-                Please connect your wallet to interact with the blockchain.
-              </p>
-            </div>
-          )}
-        </div>
-      </div>
-    </main>
+          </form>
+        </CardContent>
+        <CardFooter className="flex justify-between">
+          <Button variant="outline">Cancel</Button>
+          <Button>Deploy</Button>
+        </CardFooter>
+      </Card>
+    </div>
   );
 }
