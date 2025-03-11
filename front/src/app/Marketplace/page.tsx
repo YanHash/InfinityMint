@@ -3,10 +3,6 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { abi, contractAddress } from "@/app/Marketplace/constants/index";
 import {
   useAccount,
-  useSendTransaction,
-  useWriteContract,
-  useWaitForTransactionReceipt,
-  useWatchContractEvent,
 } from "wagmi";
 import { useState } from "react";
 import { parseEther } from "viem/utils";
@@ -37,52 +33,52 @@ export default function Home() {
 
   return (
     <main className="min-h-screen p-8">
-        <div className="flex justify-end mb-8">
-          <ConnectButton />
-        </div>
-        {isConnected ? (
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-gray-200/20">
-            <h1 className="text-2xl font-bold mb-6 text-center">Buy NFT</h1>
+      <div className="flex justify-end mb-8">
+        <ConnectButton />
+      </div>
+      {isConnected ? (
+        <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-gray-200/20">
+          <h1 className="text-2xl font-bold mb-6 text-center">Buy NFT</h1>
 
-            <div className="space-y-6">
-              <div className="space-y-4">
+          <div className="space-y-6">
+            <div className="space-y-4">
 
-                <input
-                  type="text"
-                  onChange={(e) => {
-                    setTokenIdNft(e.target.value);
-                  }}
-                  placeholder="Token ID"
-                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-gray-200/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                />
+              <input
+                type="text"
+                onChange={(e) => {
+                  setTokenIdNft(e.target.value);
+                }}
+                placeholder="Token ID"
+                className="w-full px-4 py-3 rounded-lg bg-white/5 border border-gray-200/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              />
 
-                <input
-                  type="text"
-                  onChange={(e) => {
-                    setPrice((e.target.value));
-                  }}
-                  placeholder="Price"
-                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-gray-200/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                />
+              <input
+                type="text"
+                onChange={(e) => {
+                  setPrice((e.target.value));
+                }}
+                placeholder="Price"
+                className="w-full px-4 py-3 rounded-lg bg-white/5 border border-gray-200/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              />
 
-                <WriteMarketplaceBlockchainBuyNFT
-                  accountAddress={address as `0x${string}`}
-                  tokenId={tokenIdNft ?? ""}
-                  price={price?.toString() ?? "100"}
-                ></WriteMarketplaceBlockchainBuyNFT>
-              </div>
+              <WriteMarketplaceBlockchainBuyNFT
+                accountAddress={address as `0x${string}`}
+                tokenId={tokenIdNft ?? ""}
+                price={price?.toString() ?? "100"}
+              ></WriteMarketplaceBlockchainBuyNFT>
             </div>
           </div>
-        ) : (
-          <div className="text-center mt-20">
-            <h2 className="text-xl font-semibold mb-4">
-              Welcome to Simple Storage DApp
-            </h2>
-            <p className="text-gray-400">
-              Please connect your wallet to interact with the blockchain.
-            </p>
-          </div>
-        )}
+        </div>
+      ) : (
+        <div className="text-center mt-20">
+          <h2 className="text-xl font-semibold mb-4">
+            Welcome to Simple Storage DApp
+          </h2>
+          <p className="text-gray-400">
+            Please connect your wallet to interact with the blockchain.
+          </p>
+        </div>
+      )}
 
 
 
