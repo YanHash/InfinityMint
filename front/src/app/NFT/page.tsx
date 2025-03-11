@@ -1,90 +1,268 @@
 "use client";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { abi, contractAddress } from "@/app/NFT/constants/index";
+import * as React from "react";
+import { useState } from "react";
+
+import { Button } from "@/components/ui/button";
 import {
-  useReadContract,
-  useAccount,
-  useWriteContract,
-  useWaitForTransactionReceipt,
-  useWatchContractEvent,
-} from "wagmi";
-import { useState, useEffect } from "react";
-import { config } from "./config/config";
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Trash2 } from "lucide-react"; // Icône poubelle
 
-import { WriteNFTBlockchain } from "@/blockchain/components/writeNftBlockchain";
+import { useGetCollection } from "@/blockchain/hooks/collectionHooks";
+import { useAccount } from "wagmi";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { toast } from "sonner";
+export default function CardWithForm() {
+  const { address } = useAccount();
+  const { collectionList } = useGetCollection(address as `0x${string}`);
 
-export default function Home() {
-  const { address, isConnected } = useAccount();
+  // ✅ État des champs dynamiques
+  const [customFields, setCustomFields] = useState([
+    { id: Date.now(), name: "", value: "" },
+  ]);
 
-  const [nftName, setNftName] = useState<string | null>(null);
-  const [nftDescription, setNftDescription] = useState<string | null>(null);
-  const [nftImageUrl, setNftImageUrl] = useState<string | null>(null);
+  // ✅ État pour ouvrir/fermer le Dialog
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  // Ajouter un nouveau champ vide
+  const addField = () => {
+    setCustomFields([...customFields, { id: Date.now(), name: "", value: "" }]);
+  };
+
+  // Modifier un champ existant
+  const updateField = (id: number, key: "name" | "value", newValue: string) => {
+    setCustomFields(
+      customFields.map((field) =>
+        field.id === id ? { ...field, [key]: newValue } : field
+      )
+    );
+  };
+
+  // Supprimer un champ
+  const removeField = (id: number) => {
+    setCustomFields(customFields.filter((field) => field.id !== id));
+  };
+
+  // ✅ Gérer l'ouverture du Dialog
+  const openDialog = () => {
+    setIsDialogOpen(true);
+  };
+
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+  };
+
+  const [collectionName, setCollectionName] = useState("");
+  const [collectionDescription, setCollectionDescription] = useState("");
+  const handleCreateCollection = () => {
+    const collectionId = "ID à recup depuis la blockchain"; // Remplace par l'ID réel récupéré de la blockchain
+
+    toast(`${collectionName} has been created`, {
+      description: collectionDescription,
+      action: {
+        label: "Copy ID",
+        onClick: () => {
+          navigator.clipboard.writeText(collectionId.toString()).then(() => {
+            toast("Collection ID copied to clipboard!"); // Un autre toast pour informer l'utilisateur
+          });
+        },
+      },
+    });
+
+    closeDialog();
+  };
 
   return (
-    <main className="min-h-screen p-8">
-      <div className="max-w-2xl mx-auto">
-        <div className="flex justify-end mb-8">
-          <ConnectButton />
-        </div>
+    <Card className="w-[550px]">
+      <CardHeader className="text-center">
+        <CardTitle>Mint Your NFT</CardTitle>
+        <CardDescription>Create freely YOUR new NFTs.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form>
+          <div className="grid w-full items-center gap-4">
+            {/* Name Field */}
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="name">Name</Label>
+              <Input id="name" placeholder="Name of your NFT" />
+            </div>
 
-        {isConnected ? (
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-gray-200/20">
-            <h1 className="text-2xl font-bold mb-6 text-center">
-              Gestion du contrat NFT{" "}
-            </h1>
+            {/* Description Field */}
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="description">Description</Label>
+              <Input id="description" placeholder="Description of your NFT" />
+            </div>
 
-            <div className="space-y-6">
-              <div className="space-y-4">
-                <input
-                  type="text"
-                  onChange={(e) => {
-                    setNftName;
-                  }}
-                  placeholder="Nom du NFT"
-                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-gray-200/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                />
-                <input
-                  type="text"
-                  onChange={(e) => {
-                    setNftDescription;
-                  }}
-                  placeholder="Description"
-                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-gray-200/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                />
-                <input
-                  type="text"
-                  onChange={(e) => {
-                    setNftImageUrl;
-                  }}
-                  placeholder="Image URL"
-                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-gray-200/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                />
-                {/* le dernier paramètre correspond à l'adresse du contrat de la marketplace afin de lui autoriser le contrôle */}
-                <WriteNFTBlockchain
-                  accountAddress={address}
-                  functionName={"safeMint"}
-                  argsTab={[
-                    address,
-                    "name",
-                    "description",
-                    "image URL",
-                    "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
-                  ]}
-                ></WriteNFTBlockchain>
+            {/* URL Field */}
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="url">Media URL</Label>
+              <Input id="url" placeholder="URL of your NFT visual" />
+            </div>
+
+            {/* Champs dynamiques */}
+            {customFields.map((field) => (
+              <div key={field.id} className="flex items-center space-x-2">
+                <div className="flex flex-col space-y-1.5 w-full">
+                  <Label>Field Name</Label>
+                  <Input
+                    value={field.name}
+                    onChange={(e) =>
+                      updateField(field.id, "name", e.target.value)
+                    }
+                    placeholder="Enter field name (e.g. stylistic attribut, color)"
+                  />
+                  <Label>Field Value</Label>
+                  <Input
+                    value={field.value}
+                    onChange={(e) =>
+                      updateField(field.id, "value", e.target.value)
+                    }
+                    placeholder="Enter field value"
+                  />
+                </div>
+                <Button variant="ghost" onClick={() => removeField(field.id)}>
+                  <Trash2 className="w-5 h-5 text-red-500" />
+                </Button>
+              </div>
+            ))}
+
+            {/* Bouton pour ajouter un champ */}
+            <Button
+              variant="outline"
+              className="border-white bg-slate-600 text-white"
+              onClick={(e) => {
+                e.preventDefault();
+                addField();
+              }}
+            >
+              Add Field
+            </Button>
+
+            {/* Sélection de Collection */}
+            <div className="flex items-center space-x-4">
+              <div className="flex flex-col space-y-1.5 w-full">
+                <Label htmlFor="framework">Collection</Label>
+                <Select>
+                  <SelectTrigger id="framework">
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent position="popper">
+                    {collectionList.map((value) => (
+                      <SelectItem key={value.collectionId} value={value.name}>
+                        {value.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Button
+                  variant="outline"
+                  className="border-indigo-500 bg-slate-500 text-black"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openDialog();
+                  }} // Ouverture du Dialog ici
+                >
+                  New Collection
+                </Button>
               </div>
             </div>
           </div>
-        ) : (
-          <div className="text-center mt-20">
-            <h2 className="text-xl font-semibold mb-4">
-              Welcome to Simple Storage DApp
-            </h2>
-            <p className="text-gray-400">
-              Please connect your wallet to interact with the blockchain.
-            </p>
+        </form>
+      </CardContent>
+
+      <CardFooter className="flex justify-between">
+        <Button onClick={() => (window.location.href = "/")} variant="outline">
+          Cancel
+        </Button>
+        <Button
+          variant="default"
+          className="bg-gradient-to-r from-green-400 to-blue-500"
+        >
+          Mint NFT
+        </Button>
+      </CardFooter>
+
+      {/* ✅ Dialog intégré ici */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-4xl bg-slate-100">
+          <DialogHeader>
+            <DialogTitle className="text-center">New Collection</DialogTitle>
+            <DialogDescription className="text-center">
+              Fill your Collection Fields and save once done!
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="collectionName" className="text-left">
+                Name
+              </Label>
+              <Input
+                id="collectionName"
+                placeholder="Collection Name"
+                className="col-span-3"
+                value={collectionName}
+                onChange={(e) => setCollectionName(e.target.value)}
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="collectionDescription" className="text-left">
+                Description
+              </Label>
+              <Input
+                id="collectionDescription"
+                placeholder="Collection Description"
+                className="col-span-3"
+                value={collectionDescription}
+                onChange={(e) => setCollectionDescription(e.target.value)}
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="ownerAddress" className="text-left">
+                Owner Address
+              </Label>
+              <Input
+                id="ownerAddress"
+                value={address}
+                className="col-span-3"
+                readOnly
+              />
+            </div>
           </div>
-        )}
-      </div>
-    </main>
+          <DialogFooter>
+            <Button
+              onClick={() => {
+                closeDialog();
+                handleCreateCollection();
+              }}
+              type="submit"
+            >
+              Create
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </Card>
   );
 }
