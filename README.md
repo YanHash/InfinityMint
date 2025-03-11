@@ -1,7 +1,6 @@
 # InfinityMint
 
 ## Description
-InfinityMint est une marketplace NFT innovante permettant aux utilisateurs d'acheter, vendre et échanger des NFT en toute simplicité. Développée avec **Next.js**, **TypeScript** et **shadcn/ui**, la plateforme offre une interface utilisateur moderne et réactive.
 **InfinityMint** est une marketplace NFT innovante permettant aux utilisateurs d'acheter, vendre et échanger des NFT de manière éclairée et en toute simplicité, même en ayant peu de connaissances en art.
 
 Développée avec **Next.js**, **TypeScript** et **shadcn/ui**, la plateforme offre une interface utilisateur moderne et réactive.
@@ -87,11 +86,6 @@ Les contributeurs du projet sont :
 - Sylvain Delavacquery
 - Jules Glocko
 - Cyril Berche
-- ARAB Yanis
-- MAILLOT Etienne
-- DELAVACQUERY Sylvain
-- GLOCKO Jules
-- BERCHE Cyril
 
 
 *Mars 2025*
