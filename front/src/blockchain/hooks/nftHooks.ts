@@ -6,14 +6,6 @@ import { contractAddress as contractAddressMarketplace } from "../config/configM
 // Ce hook permet de recupérer les nft d'une collection dans la blockchain
 export const useMintNFT = (accountAddress: `0x${string}` | undefined, name: string, description: string, imageUrl: string, attributes: string) => {
 
-    console.log("🚀 NFT creation: ", {
-        name,
-        description,
-        imageUrl,
-        attributes
-    });
-
-
     const { writeContract, isSuccess, isError, error } = useWriteContract();
 
     const request = () => {
