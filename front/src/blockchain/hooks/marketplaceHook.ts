@@ -9,6 +9,7 @@ import { parseEther } from "viem";
 interface Collection {
     collectionId: string
     owner : `0x${string}`
+    name : string
     description: string
     totalSupply: number
 }
@@ -18,6 +19,10 @@ interface RetourCollectionHooks {
     error: ReadContractErrorType | null
     isPending: boolean
     setSkipCollection : Dispatch<SetStateAction<number>>
+}
+
+export const useCreateCollection = (accountAddress : `0x${string}`) => {
+
 }
 
 // Ce hook permet de recupérer les collections dans la blockchain
