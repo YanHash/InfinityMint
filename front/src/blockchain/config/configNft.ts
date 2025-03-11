@@ -327,6 +327,11 @@ export const abi = [
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
         "internalType": "string",
         "name": "name",
         "type": "string"
@@ -629,5 +634,5 @@ export const abi = [
     "type": "function"
   }
 ]
-  
-  export const contractAddress = '0x5fbdb2315678afecb367f032d93f642f64180aa3'
+
+export const contractAddress = '0x5fbdb2315678afecb367f032d93f642f64180aa3'
