@@ -11,16 +11,10 @@ Un objectif commun : *Efficace et rapide : un achat, une vente !*
 
 ## Technologies utilisées
 - **Next.js** - Framework React pour le rendu côté serveur et statique.
-  @@ -13,11 +18,17 @@ InfinityMint est une marketplace NFT innovante permettant aux utilisateurs d'ach
 - **WalletConnect / MetaMask** - Authentification et transactions sécurisées.
 
 ## Fonctionnalités principales
-- 🔹 **Inscription & Connexion** via portefeuille crypto (MetaMask, WalletConnect, etc.).
-- 🔹 **Création et Minting** de NFT avec stockage décentralisé.
-- 🔹 **Achat & Vente** de NFT sur un marketplace sécurisé.
-- 🔹 **Historique des transactions** et gestion des collections.
-- 🔹 **Interface fluide et responsive** optimisée avec shadcn/ui et Tailwind CSS.
-  🔹 **Inscription & Connexion** via portefeuille crypto (MetaMask, WalletConnect, etc.).
+🔹 **Inscription & Connexion** via portefeuille crypto (MetaMask, WalletConnect, etc.).
 
 🔹 **Création et Minting** de NFT avec stockage décentralisé.
 
@@ -30,14 +24,16 @@ Un objectif commun : *Efficace et rapide : un achat, une vente !*
 
 🔹 **Interface fluide et responsive** optimisée avec shadcn/ui et Tailwind CSS.
 
-🔹**Ajout de commentaires et estimation** par des experts certifiés
+🔹 **Ajout de commentaires et estimation** par des experts certifiés
 
 ## Installation et démarrage
 ### Prérequis
-@@ -27,17 +38,39 @@ InfinityMint est une marketplace NFT innovante permettant aux utilisateurs d'ach
+- Node.js (version 22+ recommandée)
+- pnpm
+- Un portefeuille crypto (MetaMask)
 
 ### Installation
-  ```sh
+```sh
   # Cloner le projet
   #Cloner le projet
   git clone https://github.com/votre-repo/infinitymint.git
@@ -62,10 +58,10 @@ Un objectif commun : *Efficace et rapide : un achat, une vente !*
   #Installer les dépendances du front-end
   cd front 
   pnpm install
-  ```
+```
 
 ### Lancer le projet en mode développement
-  ```sh
+```sh
   pnpm dev  # ou npm run dev
   cd front
   pnpm run dev
@@ -74,11 +70,15 @@ Un objectif commun : *Efficace et rapide : un achat, une vente !*
   npx hardhat node
   npx hardhat ignition deploy ./ignition/modules/NftContract.ts --network localhost
   npx hardhat ignition deploy ./ignition/modules/NftMarketplace.ts --network localhost
- 
-  ```
+```
 Ouvrez votre navigateur et accédez à `http://localhost:3000`
 
-@@ -50,8 +83,11 @@ Pour déployer l'application sur Vercel :
+## Déploiement
+Pour déployer l'application sur Vercel :
+```sh
+ pnpm build  # ou npm run build
+ vercel
+```
 
 ## Contributeurs
 Les contributeurs du projet sont :
