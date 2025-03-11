@@ -18,7 +18,7 @@ export default function Home() {
 
   const [nftName, setNftName] = useState<string | null>(null);
   const [nftDescription, setNftDescription] = useState<string | null>(null);
-  const [nftImageUrl, setNftImageUrl] = useState<string | null>(null);
+  const [nftImageUrl, setNftImageUrl] = useState<string>("");
 
   return (
     <main className="min-h-screen p-8">
@@ -38,7 +38,7 @@ export default function Home() {
                 <input
                   type="text"
                   onChange={(e) => {
-                    setNftName;
+                    setNftName(e.target.value);
                   }}
                   placeholder="Nom du NFT"
                   className="w-full px-4 py-3 rounded-lg bg-white/5 border border-gray-200/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
@@ -46,7 +46,7 @@ export default function Home() {
                 <input
                   type="text"
                   onChange={(e) => {
-                    setNftDescription;
+                    setNftDescription(e.target.value);
                   }}
                   placeholder="Description"
                   className="w-full px-4 py-3 rounded-lg bg-white/5 border border-gray-200/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
@@ -54,13 +54,13 @@ export default function Home() {
                 <input
                   type="text"
                   onChange={(e) => {
-                    setNftImageUrl;
+                    setNftImageUrl(e.target.value);
                   }}
                   placeholder="Image URL"
                   className="w-full px-4 py-3 rounded-lg bg-white/5 border border-gray-200/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                 />
                 {/* le dernier paramètre correspond à l'adresse du contrat de la marketplace afin de lui autoriser le contrôle */}
-                <WriteNFTBlockchain address={address as `0x${string}`} name={nftName??""} description={nftDescription ?? ""} imageUrl={nftImageUrl ?? ""} attributes={""}></WriteNFTBlockchain>
+                <WriteNFTBlockchain address={address as `0x${string}`} name={nftName ?? ""} description={nftDescription ?? ""} imageUrl={nftImageUrl ?? ""} attributes={""}></WriteNFTBlockchain>
               </div>
             </div>
           </div>
