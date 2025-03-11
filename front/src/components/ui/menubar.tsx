@@ -267,6 +267,9 @@ const MainMenubar = () => {
         <MenubarTrigger onClick={() => router.push('/collection')}>Découvrir</MenubarTrigger>
       </MenubarMenu>
       <MenubarMenu>
+        <MenubarTrigger onClick={() => router.push('/mesNFTs')}>Mes NFT</MenubarTrigger>
+      </MenubarMenu>
+      <MenubarMenu>
         <MenubarTrigger>NFT</MenubarTrigger>
         <MenubarContent>
           <MenubarItem>
