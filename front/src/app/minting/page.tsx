@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   AlertDialog,
@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/select";
 import { Trash2 } from "lucide-react"; // Icône poubelle
 
-import { useGetCollection } from "@/blockchain/hooks/collectionHooks";
+import { useCreateCollection, useGetCollection } from "@/blockchain/hooks/marketplaceHook";
 import { useAccount } from "wagmi";
 import {
   Dialog,
@@ -43,10 +43,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { useMintNFT } from "@/blockchain/hooks/nftHooks";
 
 export default function CardWithForm() {
   const { address } = useAccount();
-  const { collectionList } = useGetCollection(address as `0x${string}`);
+  const { collectionList, error:errorCollection, isPending: isPendingCollection, setSkipCollection, refetch:refetchCollection} = useGetCollection(address as `0x${string}`);
 
   const [customFields, setCustomFields] = useState([
     { id: Date.now(), name: "", value: "" },
@@ -59,6 +60,15 @@ export default function CardWithForm() {
 
   const [collectionName, setCollectionName] = useState("");
   const [collectionDescription, setCollectionDescription] = useState("");
+
+  const {request, isSuccess, isError, error} = useCreateCollection(address, collectionName, collectionDescription);
+
+
+  useEffect(()=>{
+    // Cette fonction permet de raffraichir la page lorsqu'il y a un changement sur la creation de la collection
+    if(isSuccess){refetchCollection()}
+  },[isSuccess])
+
 
   // Ajouter un champ dynamique
   const addField = () => {
@@ -89,6 +99,12 @@ export default function CardWithForm() {
     // Simuler une création sur blockchain
     console.log(`Collection Created: ${collectionName}`);
 
+    // CODE CREATE BLOCKCHAIN :
+
+
+    request()
+
+
     // Afficher la notification et fermer la modale
     toast(`${collectionName} has been created!`);
     setIsDialogOpen(false);
@@ -100,6 +116,9 @@ export default function CardWithForm() {
   const [nftDescription, setNftDescription] = useState("");
   const [nftUrl, setNftUrl] = useState("");
   const [selectedCollection, setSelectedCollection] = useState("");
+
+  const {request:requestMintNFT, isSuccess:isSuccessMintNFT, isError:isErrorMintNFT, error:errorMintNFT} = useMintNFT(address, nftName,nftDescription,nftUrl,JSON.stringify(customFields))
+
 
   // Soumission du formulaire
   const handleSubmit = (e: React.FormEvent) => {
@@ -117,6 +136,10 @@ export default function CardWithForm() {
     toast.success("NFT information saved successfully!");
 
     // 🔹 Ici, tu peux envoyer `nftData` à ton backend ou à la blockchain
+    // CODE
+
+    requestMintNFT();
+    
     setIsNFTAlertOpen(false);
     setIsNFTAlertOpen(true);
   };

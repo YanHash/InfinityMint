@@ -43,7 +43,7 @@ export const useCreateCollection = (accountAddress : `0x${string}` | undefined, 
 export const useGetCollection = (accountAddress : `0x${string}`) => {
 
     const [ skipCollection, setSkipCollection ] = useState<number>(0)
-    var [ collectionList, setCollectionList ] = useState<Collection[]>([])
+    const [ collectionList, setCollectionList ] = useState<Collection[]>([])
 
     const { data: dataCollectionFromBlockchain, error, isPending: isPending, refetch } = useReadContract({
         abi,
@@ -67,10 +67,13 @@ export const useGetCollection = (accountAddress : `0x${string}`) => {
     },[dataCollectionFromBlockchain])
 
     useEffect(()=>{
+        console.log("Passage dans skipCollection");
         refetch()
     },[skipCollection])
 
-    return {collectionList, error, isPending, setSkipCollection}
+
+
+    return {collectionList, error, isPending, setSkipCollection, refetch}
 }
 
 
