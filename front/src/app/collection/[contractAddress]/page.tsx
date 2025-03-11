@@ -29,6 +29,9 @@ export default function CollectionPage() {
     // Hook pour récupérer les NFTs de la collection depuis la blockchain
     const { nftList, error, isPending, refetch } = useGetNFTFromCollection(userAddress, contractAddress);
 
+    console.log("👉 nftList: ", nftList);
+
+
     const parseTokenUri = (tokenUri: string) => {
         try {
             const formattedJson = tokenUri.replace(/""/g, '", "');
