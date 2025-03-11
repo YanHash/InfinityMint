@@ -35,7 +35,7 @@ contract NFTContract is ERC721, ERC721Burnable, ERC721URIStorage, Ownable {
         _tokenIdCounter = _tokenIdCounter +1;
 
         // Il créé le token, en appelant la fonction _safeMint
-        _safeMint(to, tokenId);
+        _safeMint(msg.sender, tokenId);
 
         // On va créer l'uri du NFT
         string memory itemUri = getTokenURI(name, description, imageUrl, attributes);
