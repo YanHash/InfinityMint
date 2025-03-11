@@ -34,7 +34,7 @@ export const GetCollectionFromBlockchain = ({ accountAddress }:Props) => {
                 }}
                 className="w-full px-4 py-3 rounded-lg bg-white/5 border border-gray-200/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
             >
-                {functionName}
+                Get Collection from blockchain
             </button>
             {isPending && <p>Transaction en cours</p>}
             {collectionList.map((collection, index) => {
