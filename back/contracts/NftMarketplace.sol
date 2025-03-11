@@ -30,6 +30,13 @@ contract NFTMarketplace {
         address seller;
         uint256 price;
         string tokenUri;
+        bool listed;
+    }
+
+    struct User {
+        address owner;
+        bool created;
+        Collection[] collections;
     }
 
     // ------------------------------------------------------------------------
@@ -45,6 +52,9 @@ contract NFTMarketplace {
     Collection[] public listeCollections;
     // Mapping permettant de savoir si une collection existe 
     mapping(uint256 => bool) public listeIdCollectionExists;
+
+
+    mapping(address => User) public usersList; // address => collection proprio
 
     // ------------------------------------------------------------------------
     // ------------------------- VARIABLES LISTING ----------------------------
@@ -161,6 +171,19 @@ contract NFTMarketplace {
 
         addCollection(newCollection);
 
+        if(!usersList[msg.sender].created){
+            // L'utilisateur n'existe pas on va le creer et l'ajouter 
+            usersList[msg.sender].owner = msg.sender;
+            usersList[msg.sender].created = true;
+        }
+
+        usersList[msg.sender].collections.push(newCollection);
+
+    }
+
+    // Cette fonction permet de récupérer les informations de l'utilisateur
+    function getUserInformations() external view returns (User memory) {
+        return usersList[msg.sender];
     }
 
     function createCollectionDefault() internal {
@@ -186,11 +209,13 @@ contract NFTMarketplace {
         string memory tokenUri = ERC721URIStorage(nftContract).tokenURI(tokenId);
 
         // On ajoute le NFT au listing
-        Listing memory valeur = Listing(collectionId,msg.sender, price,tokenUri);
+        Listing memory valeur = Listing(collectionId,msg.sender, price,tokenUri, true);
+        require(!listings[nftContract][tokenId].listed, "NFT already listed");
         listings[nftContract][tokenId] = valeur;
 
         // On ajoute également à la collection si l'id != 0
         if(collectionId != 0){
+            require(collections[collectionId].owner == msg.sender, "You are not the owner of the collection");
             collectionToNFTs[collectionId].push(valeur);
         }
         else {
@@ -288,5 +313,6 @@ contract NFTMarketplace {
         IERC721Metadata token = IERC721Metadata(nftContract);
         return token.tokenURI(tokenId);
     }
+
 
 }

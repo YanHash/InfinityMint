@@ -232,6 +232,11 @@ export const abi = [
         "internalType": "string",
         "name": "tokenUri",
         "type": "string"
+      },
+      {
+        "internalType": "bool",
+        "name": "listed",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -354,6 +359,11 @@ export const abi = [
             "internalType": "string",
             "name": "tokenUri",
             "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "listed",
+            "type": "bool"
           }
         ],
         "internalType": "struct NFTMarketplace.Listing[]",
@@ -395,6 +405,11 @@ export const abi = [
             "internalType": "string",
             "name": "tokenUri",
             "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "listed",
+            "type": "bool"
           }
         ],
         "internalType": "struct NFTMarketplace.Listing[]",
@@ -476,6 +491,63 @@ export const abi = [
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "getUserInformations",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "internalType": "bool",
+            "name": "created",
+            "type": "bool"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "collectionId",
+                "type": "uint256"
+              },
+              {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+              },
+              {
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "description",
+                "type": "string"
+              },
+              {
+                "internalType": "uint256",
+                "name": "totalSupply",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct NFTMarketplace.Collection[]",
+            "name": "collections",
+            "type": "tuple[]"
+          }
+        ],
+        "internalType": "struct NFTMarketplace.User",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -504,6 +576,11 @@ export const abi = [
         "internalType": "string",
         "name": "tokenUri",
         "type": "string"
+      },
+      {
+        "internalType": "bool",
+        "name": "listed",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -629,6 +706,11 @@ export const abi = [
         "internalType": "string",
         "name": "tokenUri",
         "type": "string"
+      },
+      {
+        "internalType": "bool",
+        "name": "listed",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -657,6 +739,11 @@ export const abi = [
             "internalType": "string",
             "name": "tokenUri",
             "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "listed",
+            "type": "bool"
           }
         ],
         "internalType": "struct NFTMarketplace.Listing",
@@ -667,6 +754,30 @@ export const abi = [
     "name": "removeListing",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "usersList",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "created",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   }
 ]
