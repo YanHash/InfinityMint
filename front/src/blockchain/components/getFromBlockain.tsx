@@ -76,6 +76,7 @@ export const GetCollectionFromBlockchain = ({
     useGetCollection(accountAddress);
 
   interface Collection {
+    name: string;
     collectionId: string;
     owner: `0x${string}`;
     description: string;
