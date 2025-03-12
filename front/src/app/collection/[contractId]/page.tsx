@@ -81,7 +81,8 @@ export default function CollectionPage() {
                                     image: parsedNFT.image,
                                     seller: nft.seller,
                                     price: nft.price,
-                                    contractId: contractId
+                                    contractId: contractId,
+                                    contractAddress: nft.contractAddress,
                                 })
                             }
                         >

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useNFTStore } from "@/store/useNFTStore";
 import { useBuyNFT } from "@/blockchain/hooks/marketplaceHook";
 import { formatAddress } from "../../../utils/format";
+import { contractAddress } from "@/app/Marketplace/constants";
 
 
 export default function ProductPage() {
@@ -32,6 +33,7 @@ export default function ProductPage() {
         seller: selectedNFT.seller,
         blockchain: "Ethereum",
         contractId: selectedNFT.contractId,
+        contractAddress: selectedNFT.contractAddress,
         tokenId: selectedNFT.tokenId,
         standard: "ERC-721",
         attributes: {},
@@ -91,6 +93,10 @@ export default function ProductPage() {
                             <p>
                                 <strong>Collection ID :</strong>{" "}
                                 <span className="break-all">{formatAddress(product.contractId)}</span>
+                            </p>
+                            <p>
+                                <strong>Contract :</strong>{" "}
+                                <span className="break-all">{formatAddress(product.contractAddress)}</span>
                             </p>
                             <p>
                                 <strong>Token ID :</strong> {product.tokenId}

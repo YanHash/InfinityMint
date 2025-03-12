@@ -9,6 +9,7 @@ interface NFT {
     seller: string;
     price: number;
     contractId: string;
+    contractAddress: string;
 }
 
 interface NFTStore {
