@@ -47,6 +47,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export default function List() {
   const { address } = useAccount();
@@ -56,8 +65,9 @@ export default function List() {
   const [collectionName, setCollectionName] = useState("");
   const [collectionDescription, setCollectionDescription] = useState("");
   const [selectedCollection, setSelectedCollection] = useState("");
-
-  const { request, isSuccess } = useCreateCollection(
+  const [isAlertOpenSuccess, setIsAlertOpenSuccess] = useState(false);
+  const [isAlertOpenFail, setIsAlertOpenFail] = useState(false);
+  const { request, isSuccess, isError } = useCreateCollection(
     address,
     collectionName,
     collectionDescription
@@ -66,12 +76,6 @@ export default function List() {
   const { collectionList, refetch: refetchCollection } = useGetCollection(
     address as `0x${string}`
   );
-
-  // Fonction pour créer une collection
-  const handleCreateCollection = () => {
-    request();
-    console.log(`Collection Created: ${collectionName}`);
-  };
 
   useEffect(() => {
     if (isSuccess) {
@@ -95,6 +99,22 @@ export default function List() {
     listNFTRequest();
     console.log("NFT Published");
   };
+
+  // Créer une collection
+  const handleCreateCollection = () => {
+    console.log(`Collection Created: ${collectionName}`);
+    request();
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      console.log("is success" + isSuccess);
+      setIsAlertOpenSuccess(true);
+    } else if (isError) {
+      console.log("is success" + isError);
+      setIsAlertOpenFail(true);
+    }
+  }, [isSuccess, isError]);
 
   return (
     <div className="flex items-center justify-center h-screen  bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-whitebg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%">
@@ -140,18 +160,22 @@ export default function List() {
                 {/* Sélection de Collection */}
                 <div className="flex flex-col space-y-1.5 w-full">
                   <Label htmlFor="collection">Collection</Label>
-                  <Select onValueChange={setSelectedCollection}>
+                  <Select
+                    value={selectedCollection}
+                    onValueChange={setSelectedCollection}
+                  >
                     <SelectTrigger id="collection">
                       <SelectValue placeholder="Select a collection" />
                     </SelectTrigger>
-                    <SelectContent position="popper">
+                    <SelectContent position="popper" className="text-black">
                       <SelectItem value="0">No Collection</SelectItem>
-                      {collectionList.map((value) => (
+                      {collectionList.map((coll) => (
                         <SelectItem
-                          key={value.collectionId}
-                          value={value.collectionId}
+                          key={coll.collectionId}
+                          value={coll.collectionId}
+                          className="text-black"
                         >
-                          {value.name}
+                          {coll.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -234,6 +258,59 @@ export default function List() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+
+        {/* AlertDialog pour confirmer la création d'une collection*/}
+        <AlertDialog
+          open={isAlertOpenSuccess}
+          onOpenChange={setIsAlertOpenSuccess}
+        >
+          <AlertDialogContent className="bg-white">
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-green-600">
+                Collection Created!
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                Your collection "{collectionName}" has been successfully
+                created.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogAction
+                onClick={() => {
+                  setIsAlertOpenSuccess(false);
+                  setIsDialogOpen(false);
+                }}
+              >
+                Got It
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
+        {/* AlertDialog pour signaler un echec dans la création d'une collection*/}
+        <AlertDialog open={isAlertOpenFail} onOpenChange={setIsAlertOpenFail}>
+          <AlertDialogContent className="bg-white">
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-red-700">
+                Creation Failure.
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                An error occured while creating your Collection. You can Check
+                your network connexion of your Wallet.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogAction
+                onClick={() => {
+                  setIsAlertOpenFail(false);
+                  setIsDialogOpen(false);
+                }}
+              >
+                Got It
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </Card>
     </div>
   );
