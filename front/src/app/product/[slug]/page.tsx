@@ -26,7 +26,7 @@ export default function ProductPage() {
         name: selectedNFT.name || "NFT Inconnu",
         description: selectedNFT.description || "Aucune description disponible.",
         price: selectedNFT.price || 0,
-        imageUrl: "/noImage.jpeg",
+        imageUrl: selectedNFT.image,
         blockchain: "Ethereum",
         contractAddress: "0x0000000000000000000000000000000000000000",
         tokenId: "N/A",
