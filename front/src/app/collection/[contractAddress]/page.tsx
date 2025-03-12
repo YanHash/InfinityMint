@@ -9,6 +9,8 @@ import Link from "next/link";
 import { useAccount } from "wagmi";
 import { useGetNFTFromCollection } from "@/hooks/useGetNFTFromCollection";
 import { formatAddress } from "../../../utils/format";
+import { useNFTStore } from "@/store/useNFTStore"; // Import du store Zustand
+
 
 
 interface NFT {
@@ -76,7 +78,21 @@ export default function CollectionPage() {
                 {nftList.map((nft, index) => {
                     const parsedNFT = parseTokenUri(nft.tokenUri);
                     return (
-                        <Link key={index} href={`/product/${parsedNFT.tokenId}`}>
+                        <Link
+                            key={index}
+                            href={`/product/${parsedNFT.tokenId}`}
+                            onClick={() =>
+                                useNFTStore.getState().setSelectedNFT({
+                                    id: parsedNFT.tokenId,
+                                    tokenId: parsedNFT.tokenId,
+                                    name: parsedNFT.name,
+                                    description: parsedNFT.description,
+                                    image: parsedNFT.image,
+                                    seller: nft.seller,
+                                    price: nft.price,
+                                })
+                            }
+                        >
                             <Card className="rounded-2xl shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition">
                                 <Image
                                     src={parsedNFT.image}

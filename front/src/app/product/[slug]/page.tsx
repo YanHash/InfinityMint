@@ -1,9 +1,12 @@
+"use client";
+
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import path from "path";
-import fs from "fs";
 import { useBuyNFT } from "@/blockchain/hooks/marketplaceHook";
+import { useRouter } from "next/navigation";
+import { useNFTStore } from "@/store/useNFTStore";
+import { useEffect } from "react";
 
 interface Product {
     id: string;
@@ -36,30 +39,18 @@ interface Product {
     verifiedCollection: boolean;
 }
 
-const getProductData = async (slug: string) => {
-    const filePath = path.join(process.cwd(), "public", "nfts.json");
-    if (!fs.existsSync(filePath)) return null;
-    const jsonData = fs.readFileSync(filePath, "utf-8");
-    const nfts: Product[] = JSON.parse(jsonData);
-    return nfts.find((nft) => nft.id === slug) || null;
-};
-
-export async function generateStaticParams() {
-    const filePath = path.join(process.cwd(), "public", "nfts.json");
-    if (!fs.existsSync(filePath)) return [];
-    const jsonData = fs.readFileSync(filePath, "utf-8");
-    const nfts: Product[] = JSON.parse(jsonData);
-    return nfts.map((nft) => ({ slug: nft.id }));
-}
-
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
-    const resolvedParams = await params;
-    if (!resolvedParams || !resolvedParams.slug) return <p className="text-center text-gray-500">NFT non trouvé</p>;
-    const product = await getProductData(resolvedParams.slug);
+    const router = useRouter();
+    const { selectedNFT, clearSelectedNFT } = useNFTStore();
 
-    const {request, isSuccess, isError, error} = useBuyNFT("0x",product?.tokenId ?? "", product?.price.toString() ?? "0");
+    useEffect(() => {
+        if (!selectedNFT) {
+            router.push("/"); // Rediriger vers la page principale si aucun NFT n'est stocké
+        }
+    }, [selectedNFT, router]);
 
-    if (!product) return <p className="text-center text-gray-500">NFT non trouvé</p>;
+    if (!selectedNFT) return null; // Sécurité si le NFT n'est pas encore chargé
+
 
     return (
         <div className="flex min-h-screen bg-gray-100">
