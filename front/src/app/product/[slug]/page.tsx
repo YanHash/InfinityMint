@@ -31,7 +31,7 @@ export default function ProductPage() {
         imageUrl: selectedNFT.image,
         seller: selectedNFT.seller,
         blockchain: "Ethereum",
-        contractAddress: "0x0000000000000000000000000000000000000000",
+        contractId: selectedNFT.contractId,
         tokenId: selectedNFT.tokenId,
         standard: "ERC-721",
         attributes: {},
@@ -45,7 +45,7 @@ export default function ProductPage() {
         verifiedCollection: true,
     };
 
-    const { request } = useBuyNFT(product.contractAddress as `0x${string}`, product.tokenId, product.price.toString());
+    const { request } = useBuyNFT(product.contractId as `0x${string}`, product.tokenId, product.price.toString());
 
     return (
         <div className="flex min-h-screen bg-gray-100">
@@ -87,6 +87,10 @@ export default function ProductPage() {
                             <p>
                                 <strong>Seller :</strong>{" "}
                                 <span className="break-all">{formatAddress(product.seller)}</span>
+                            </p>
+                            <p>
+                                <strong>Collection ID :</strong>{" "}
+                                <span className="break-all">{formatAddress(product.contractId)}</span>
                             </p>
                             <p>
                                 <strong>Token ID :</strong> {product.tokenId}
