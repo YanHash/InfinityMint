@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import path from "path";
 import fs from "fs";
+import { useBuyNFT } from "@/blockchain/hooks/marketplaceHook";
 
 interface Product {
     id: string;
@@ -55,6 +56,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     const resolvedParams = await params;
     if (!resolvedParams || !resolvedParams.slug) return <p className="text-center text-gray-500">NFT non trouvé</p>;
     const product = await getProductData(resolvedParams.slug);
+
+    const {request, isSuccess, isError, error} = useBuyNFT("0x",product?.tokenId ?? "", product?.price.toString() ?? "0");
 
     if (!product) return <p className="text-center text-gray-500">NFT non trouvé</p>;
 
@@ -119,7 +122,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                             </ul>
                         </div>
 
-                        <Button className="mt-4 w-full">Acheter Maintenant</Button>
+                        <Button onClick={request} className="mt-4 w-full">Acheter Maintenant</Button>
                     </CardContent>
                 </Card>
             </div>
