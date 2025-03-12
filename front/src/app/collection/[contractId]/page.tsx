@@ -8,42 +8,43 @@ import Image from "next/image";
 import Link from "next/link";
 import { useAccount } from "wagmi";
 import { useGetNFTFromCollection } from "@/hooks/useGetNFTFromCollection";
-import { formatAddress } from "../../../src/utils/format";
+import { formatAddress } from "../../../utils/format";
+import { useNFTStore } from "@/store/useNFTStore"; // Import du store Zustand
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select"
 
-
-interface NFT {
-    id: string;
-    seller: `0x${string}`;
-    price: number;
-    tokenUri: string;
-}
 
 export default function CollectionPage() {
     const { address } = useAccount();
     const userAddress = address as `0x${string}`;
 
     const params = useParams();
-    const contractAddress = params?.contractAddress as string;
+    const contractId = params?.contractId as string;
     const [isClient, setIsClient] = useState<boolean>(false);
+    const [filter, setFilter] = useState<string>("");
+
 
     // Hook pour récupérer les NFTs de la collection depuis la blockchain
-    const { nftList, error, isPending, refetch } = useGetNFTFromCollection(userAddress, contractAddress);
+    const { nftList, error, isPending, refetch } = useGetNFTFromCollection(userAddress, contractId);
+
+    console.log("👉 nftList: ", nftList);
 
     const parseTokenUri = (tokenUri: string) => {
         try {
             const formattedJson = tokenUri.replace(/""/g, '", "');
             const parsed = JSON.parse(formattedJson);
             return {
+                tokenId: parsed.tokenId,
                 name: parsed.name || "NFT inconnu",
                 description: parsed.description || "Pas de description",
-                image: parsed.image?.startsWith("http") ? parsed.image : `${parsed.image}`,
+                image: parsed.image?.startsWith("http") ? parsed.image : "/noImage.jpeg", // Image par défaut
             };
         } catch (error) {
             console.error("❌ Erreur de parsing du tokenUri :", error);
             return {
+                tokenId: "",
                 name: "NFT inconnu",
                 description: "Erreur lors du chargement",
-                image: "/default-nft.png",
+                image: "/noImage.jpeg", // Image par défaut
             };
         }
     };
@@ -52,11 +53,46 @@ export default function CollectionPage() {
         setIsClient(true);
     }, []);
 
+    useEffect(() => {
+        switch (filter) {
+            case "lowToHigh": {
+                nftList.sort(function (a, b) {
+                    return b.price - a.price;
+                });
+                break
+            }
+            case "highToLow": {
+                nftList.sort(function (a, b) {
+                    return a.price - b.price;
+                });
+                break
+            }
+            case "newest": {
+                nftList.sort();
+                //todo check
+                break
+            }
+        }
+    }, [filter]);
+
     return (
         <div className="container mx-auto p-6">
             <Button onClick={() => refetch()} className="mb-6">
                 🔄 Rafraîchir les NFTs
             </Button>
+
+            <div className={"mb-5 w-1/4"}>
+                <Select onValueChange={(filtre) => setFilter(filtre)}>
+                    <SelectTrigger>
+                        <SelectValue placeholder="Filter" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="newest">Newest</SelectItem>
+                        <SelectItem value="lowToHigh">Price : Low to High</SelectItem>
+                        <SelectItem value="highToLow">Price : High to Low</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
 
             {isPending && <p className="text-blue-500">Chargement des NFTs...</p>}
             {error && <p className="text-red-500">Erreur : {error.message}</p>}
@@ -71,7 +107,23 @@ export default function CollectionPage() {
                 {nftList.map((nft, index) => {
                     const parsedNFT = parseTokenUri(nft.tokenUri);
                     return (
-                        <Link key={index} href={`/product/${nft.id}`}>
+                        <Link
+                            key={index}
+                            href={`/product/${parsedNFT.tokenId}`}
+                            onClick={() =>
+                                useNFTStore.getState().setSelectedNFT({
+                                    id: parsedNFT.tokenId,
+                                    tokenId: parsedNFT.tokenId,
+                                    name: parsedNFT.name,
+                                    description: parsedNFT.description,
+                                    image: parsedNFT.image,
+                                    seller: nft.seller,
+                                    price: nft.price,
+                                    contractId: contractId,
+                                    contractAddress: nft.contractAddress,
+                                })
+                            }
+                        >
                             <Card className="rounded-2xl shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition">
                                 <Image
                                     src={parsedNFT.image}
@@ -79,6 +131,7 @@ export default function CollectionPage() {
                                     width={300}
                                     height={200}
                                     className="w-full h-48 object-cover"
+                                    onError={(e) => (e.currentTarget.src = "/noImage.jpeg")}
                                 />
                                 <CardContent className="p-4">
                                     <h2 className="text-xl font-semibold">{parsedNFT.name}</h2>
