@@ -37,6 +37,7 @@ import { Button } from "@/components/ui/button";
 import {
   useCreateCollection,
   useGetCollection,
+  useListNFT,
 } from "@/blockchain/hooks/marketplaceHook";
 import {
   Dialog,
@@ -48,7 +49,7 @@ import {
 } from "@/components/ui/dialog";
 
 export default function List() {
-  const { address, isConnected } = useAccount();
+  const { address } = useAccount();
 
   // États pour la création de collection
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -82,11 +83,23 @@ export default function List() {
   const [tokenIdNft, setTokenIdNft] = useState<string | null>(null);
   const [price, setPrice] = useState<string | null>(null);
 
+  const {
+    request: listNFTRequest,
+    isSuccess: isListNFTSuccess,
+    isError: isListNFTError,
+    error: listNFTError,
+  } = useListNFT(address, tokenIdNft ?? "", price ?? "", selectedCollection);
+  const publishListing = () => {
+    console.log("Publishing Listing");
+    listNFTRequest();
+    console.log("NFT Published");
+  };
+
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="flex items-center justify-center h-screen  bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-whitebg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%">
       <Card className="w-3/4">
-        <CardHeader>
-          <CardTitle>List your NFT for selling</CardTitle>
+        <CardHeader className="flex flex-col items-center text-2xl">
+          <CardTitle className="text-4xl">List your NFT for selling</CardTitle>
           <CardDescription>
             Sell your Art and get the BEST price from InfinityMint
           </CardDescription>
@@ -141,7 +154,7 @@ export default function List() {
                   </Select>
                   <Button
                     variant="outline"
-                    className="border-indigo-500 bg-slate-500 text-black"
+                    className="border-white bg-gradient-to-br from-blue-400 to-purple-500 text-white"
                     onClick={(e) => {
                       e.preventDefault();
                       setIsDialogOpen(true);
@@ -156,7 +169,14 @@ export default function List() {
         </CardContent>
         <CardFooter className="flex justify-between">
           <Button variant="outline">Cancel</Button>
-          <Button>Deploy</Button>
+          <Button
+            className="bg-gradient-to-bl from-blue-400 to-green-600"
+            onClick={() => {
+              publishListing();
+            }}
+          >
+            Publish
+          </Button>
         </CardFooter>
 
         {/* Dialog pour la création de collection */}
