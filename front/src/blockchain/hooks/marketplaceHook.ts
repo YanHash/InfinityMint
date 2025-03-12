@@ -65,6 +65,8 @@ export const useGetCollection = (accountAddress : `0x${string}`) => {
 
 
 interface Listing {
+    name: string | undefined;
+    image: string | undefined;
     collectionId: string
     seller: `0x${string}`
     price: number
