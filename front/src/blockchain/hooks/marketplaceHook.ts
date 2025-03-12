@@ -219,7 +219,7 @@ export const useBuyNFT  = (accountAddress : `0x${string}` | undefined, tokenId: 
     const { writeContract, isSuccess, isError, error } = useWriteContract();
     
     const request = () => {
-
+        console.log("request useBuyNFT " + price + " tokenId : " + tokenId)
         writeContract({
             address: contractAddress,
             abi: abi,
@@ -228,6 +228,8 @@ export const useBuyNFT  = (accountAddress : `0x${string}` | undefined, tokenId: 
             account:accountAddress,
             value: parseEther(price),
         });
+
+        console.log(error)
 
     }
 

@@ -10,6 +10,7 @@ import { useBuyNFT } from "@/blockchain/hooks/marketplaceHook";
 import { formatAddress } from "../../../utils/format";
 import { contractAddress } from "@/app/Marketplace/constants";
 
+import { useAccount } from "wagmi";
 
 export default function ProductPage() {
     const router = useRouter();
@@ -47,7 +48,9 @@ export default function ProductPage() {
         verifiedCollection: true,
     };
 
-    const { request } = useBuyNFT(product.contractId as `0x${string}`, product.tokenId, product.price.toString());
+    const { address, isConnected } = useAccount();
+
+    const { request } = useBuyNFT(address, product.tokenId, product.price.toString());
 
     return (
         <div className="flex min-h-screen bg-gray-100">
@@ -147,7 +150,7 @@ export default function ProductPage() {
                             </ul>
                         </div>
 
-                        <Button onClick={request} className="mt-4 w-full">
+                        <Button onClick={() => console.log(product.tokenId)} className="mt-4 w-full">
                             Acheter Maintenant
                         </Button>
                     </CardContent>
