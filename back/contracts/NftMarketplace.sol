@@ -5,15 +5,18 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 // , ERC721Burnable, Ownable
 
 import "hardhat/console.sol";
 
-contract NFTMarketplace {
+contract NFTMarketplace is Initializable{
 
-    constructor() {}
+    // Ajout du NFT 
+    constructor() {
+        _disableInitializers();
+    }
 
     // Structure pour une collection
     struct Collection {

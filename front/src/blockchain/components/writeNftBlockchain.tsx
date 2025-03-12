@@ -1,6 +1,3 @@
-import { abi, contractAddress } from '@/blockchain/config/configNft';
-import { useEffect, useState } from 'react';
-import { useWriteContract } from "wagmi";
 import { useMintNFT } from '../hooks/nftHooks';
 
 interface PropsT {
@@ -12,8 +9,6 @@ interface PropsT {
 }
 export const WriteNFTBlockchain = ({ address, name, description, imageUrl, attributes }: PropsT) => {
     const { request, isSuccess, isError, error } = useMintNFT(address, name, description, imageUrl, attributes)
-
-    console.log(address)
 
     return (
         <div>

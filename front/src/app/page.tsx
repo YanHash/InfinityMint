@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import { formatAddress } from "../src/utils/format";
+import { formatAddress } from "../utils/format";
 
 import {
   useAccount,
