@@ -10,6 +10,8 @@ import { useAccount } from "wagmi";
 import { useGetNFTFromCollection } from "@/hooks/useGetNFTFromCollection";
 import { formatAddress } from "../../../utils/format";
 import { useNFTStore } from "@/store/useNFTStore"; // Import du store Zustand
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select"
+
 
 export default function CollectionPage() {
     const { address } = useAccount();
@@ -18,6 +20,8 @@ export default function CollectionPage() {
     const params = useParams();
     const contractId = params?.contractId as string;
     const [isClient, setIsClient] = useState<boolean>(false);
+    const [filter, setFilter] = useState<string>("");
+
 
     // Hook pour récupérer les NFTs de la collection depuis la blockchain
     const { nftList, error, isPending, refetch } = useGetNFTFromCollection(userAddress, contractId);
@@ -49,11 +53,46 @@ export default function CollectionPage() {
         setIsClient(true);
     }, []);
 
+    useEffect(() => {
+        switch (filter) {
+            case "lowToHigh": {
+                nftList.sort(function (a, b) {
+                    return b.price - a.price;
+                });
+                break
+            }
+            case "highToLow": {
+                nftList.sort(function (a, b) {
+                    return a.price - b.price;
+                });
+                break
+            }
+            case "newest": {
+                nftList.sort();
+                //todo check
+                break
+            }
+        }
+    }, [filter]);
+
     return (
         <div className="container mx-auto p-6">
             <Button onClick={() => refetch()} className="mb-6">
                 🔄 Rafraîchir les NFTs
             </Button>
+
+            <div className={"mb-5 w-1/4"}>
+                <Select onValueChange={(filtre) => setFilter(filtre)}>
+                    <SelectTrigger>
+                        <SelectValue placeholder="Filter" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="newest">Newest</SelectItem>
+                        <SelectItem value="lowToHigh">Price : Low to High</SelectItem>
+                        <SelectItem value="highToLow">Price : High to Low</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
 
             {isPending && <p className="text-blue-500">Chargement des NFTs...</p>}
             {error && <p className="text-red-500">Erreur : {error.message}</p>}
