@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import {useEffect, useState} from "react";
+import {useParams} from "next/navigation";
+import {Card, CardContent} from "@/components/ui/card";
+import {Button} from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "@/components/ui/select"
 
 interface Collection {
     id: string;
@@ -35,6 +36,8 @@ export default function CollectionPage() {
     const [collection, setCollection] = useState<Collection | null>(null);
     const [nfts, setNfts] = useState<NFT[]>([]);
     const [isClient, setIsClient] = useState<boolean>(false);
+    const [filter, setFilter] = useState<string>("");
+
 
     useEffect(() => {
         setIsClient(true);
@@ -60,16 +63,53 @@ export default function CollectionPage() {
             .catch((error) => console.error("Erreur de chargement des NFT:", error));
     }, [contractAddress]);
 
+    useEffect(() => {
+        switch (filter) {
+            case "lowToHigh" : {
+                nfts.sort(function (a, b) {
+                    return b.price - a.price;
+                });
+                break
+            }
+            case "highToLow" : {
+                nfts.sort(function (a, b) {
+                    return a.price - b.price;
+                });
+                break
+            }
+            case "newest" : {
+                nfts.sort();
+                //todo check
+                break
+            }
+        }
+        setNfts(nfts);
+    }, [filter]);
+
     if (!isClient || !collection) return <p className="text-center mt-10">Chargement...</p>;
 
     return (
         <div className="container mx-auto p-6">
-            <h1 className="text-3xl font-bold mb-6">{collection.name}</h1>
-            <p className="text-gray-600 mb-4">{collection.description}</p>
+            <h1 className="text-3xl font-bold mb-6 text-center">{collection.name}</h1>
+            <p className="text-gray-600 mb-4 text-center">{collection.description}</p>
+            <br/>
+            <div className={"mb-5 w-1/4"}>
+                <Select onValueChange={(filtre) => setFilter(filtre)}>
+                    <SelectTrigger>
+                        <SelectValue placeholder="Filter"/>
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="newest">Newest</SelectItem>
+                        <SelectItem value="lowToHigh">Price : Low to High</SelectItem>
+                        <SelectItem value="highToLow">Price : High to Low</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {nfts.map((nft) => (
                     <Link key={nft.id} href={`/product/${nft.id}`}>
-                        <Card className="rounded-2xl shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition">
+                        <Card
+                            className="rounded-2xl shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition">
                             <Image
                                 src={nft.imageUrl}
                                 alt={nft.name}

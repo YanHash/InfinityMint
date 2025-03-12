@@ -10,7 +10,6 @@ import {cn} from "@/lib/utils"
 import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList,} from "@/components/ui/command"
 import {Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover"
 import {Check, ChevronsUpDown} from "lucide-react";
-import {useRouter} from "next/navigation";
 
 interface Collection {
     id: string;
@@ -30,7 +29,6 @@ export default function CollectionsPage() {
     const [displayedCollections, setDisplayedCollections] = useState<Collection[]>([]);
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState("")
-    const router = useRouter();
 
     useEffect(() => {
         fetch("/collections.json")
@@ -45,52 +43,54 @@ export default function CollectionsPage() {
 
     return (
         <div className="container mx-auto p-6">
-            <h1 className="text-3xl font-bold mb-6">Collections NFT</h1>
-            <Popover open={open} onOpenChange={setOpen}>
-                <PopoverTrigger asChild className={"mb-5"}>
-                    <Button
-                        variant="outline"
-                        role="combobox"
-                        aria-expanded={open}
-                        className="w-[200px] justify-between"
-                    >
-                        {value
-                            ? collections.find((collection) => collection.name === value)?.name
-                            : "Select a category..."}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50"/>
-                    </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0">
-                    <Command>
-                        <CommandInput placeholder="Search framework..."/>
-                        <CommandList>
-                            <CommandEmpty>No framework found.</CommandEmpty>
-                            <CommandGroup>
-                                {collections.map((collection) => (
-                                    <CommandItem
-                                        key={collection.id}
-                                        value={collection.name}
-                                        onSelect={(currentValue: string) => {
-                                            setValue(currentValue === value ? "" : currentValue)
-                                            setOpen(false)
-                                            console.log(currentValue)
-                                            currentValue === value ? setDisplayedCollections(collections) : setDisplayedCollections([collection]);
-                                        }}
-                                    >
-                                        <Check
-                                            className={cn(
-                                                "mr-2 h-4 w-4",
-                                                value === collection.name ? "opacity-100" : "opacity-0"
-                                            )}
-                                        />
-                                        {collection.name}
-                                    </CommandItem>
-                                ))}
-                            </CommandGroup>
-                        </CommandList>
-                    </Command>
-                </PopoverContent>
-            </Popover>
+            <h1 className="text-3xl font-bold mb-6 text-center">Collections NFT</h1>
+            <div className={"w-full"}>
+                <Popover open={open} onOpenChange={setOpen}>
+                    <PopoverTrigger asChild className={"mb-5"}>
+                        <Button
+                            variant="outline"
+                            role="combobox"
+                            aria-expanded={open}
+                            className="w-1/4 justify-between"
+                        >
+                            {value
+                                ? collections.find((collection) => collection.name === value)?.name
+                                : "Select a category"}
+                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50"/>
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[200px] p-0">
+                        <Command>
+                            <CommandInput placeholder="Search framework..."/>
+                            <CommandList>
+                                <CommandEmpty>No framework found.</CommandEmpty>
+                                <CommandGroup>
+                                    {collections.map((collection) => (
+                                        <CommandItem
+                                            key={collection.id}
+                                            value={collection.name}
+                                            onSelect={(currentValue: string) => {
+                                                setValue(currentValue === value ? "" : currentValue)
+                                                setOpen(false)
+                                                console.log(currentValue)
+                                                currentValue === value ? setDisplayedCollections(collections) : setDisplayedCollections([collection]);
+                                            }}
+                                        >
+                                            <Check
+                                                className={cn(
+                                                    "mr-2 h-4 w-4",
+                                                    value === collection.name ? "opacity-100" : "opacity-0"
+                                                )}
+                                            />
+                                            {collection.name}
+                                        </CommandItem>
+                                    ))}
+                                </CommandGroup>
+                            </CommandList>
+                        </Command>
+                    </PopoverContent>
+                </Popover>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {displayedCollections.map((collection) => (
                     <Card key={collection.id} className="rounded-2xl shadow-lg overflow-hidden">
