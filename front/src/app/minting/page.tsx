@@ -32,7 +32,10 @@ import {
 } from "@/components/ui/select";
 import { Trash2 } from "lucide-react"; // Icône poubelle
 
-import { useCreateCollection, useGetCollection } from "@/blockchain/hooks/marketplaceHook";
+import {
+  useCreateCollection,
+  useGetCollection,
+} from "@/blockchain/hooks/marketplaceHook";
 import { useAccount } from "wagmi";
 import {
   Dialog,
@@ -47,7 +50,13 @@ import { useMintNFT } from "@/blockchain/hooks/nftHooks";
 
 export default function CardWithForm() {
   const { address } = useAccount();
-  const { collectionList, error:errorCollection, isPending: isPendingCollection, setSkipCollection, refetch:refetchCollection} = useGetCollection(address as `0x${string}`);
+  const {
+    collectionList,
+    error: errorCollection,
+    isPending: isPendingCollection,
+    setSkipCollection,
+    refetch: refetchCollection,
+  } = useGetCollection(address as `0x${string}`);
 
   const [customFields, setCustomFields] = useState([
     { id: Date.now(), name: "", value: "" },
@@ -61,14 +70,18 @@ export default function CardWithForm() {
   const [collectionName, setCollectionName] = useState("");
   const [collectionDescription, setCollectionDescription] = useState("");
 
-  const {request, isSuccess, isError, error} = useCreateCollection(address, collectionName, collectionDescription);
+  const { request, isSuccess, isError, error } = useCreateCollection(
+    address,
+    collectionName,
+    collectionDescription
+  );
 
-
-  useEffect(()=>{
+  useEffect(() => {
     // Cette fonction permet de raffraichir la page lorsqu'il y a un changement sur la creation de la collection
-    if(isSuccess){refetchCollection()}
-  },[isSuccess])
-
+    if (isSuccess) {
+      refetchCollection();
+    }
+  }, [isSuccess]);
 
   // Ajouter un champ dynamique
   const addField = () => {
@@ -101,9 +114,7 @@ export default function CardWithForm() {
 
     // CODE CREATE BLOCKCHAIN :
 
-
-    request()
-
+    request();
 
     // Afficher la notification et fermer la modale
     toast(`${collectionName} has been created!`);
@@ -117,8 +128,18 @@ export default function CardWithForm() {
   const [nftUrl, setNftUrl] = useState("");
   const [selectedCollection, setSelectedCollection] = useState("");
 
-  const {request:requestMintNFT, isSuccess:isSuccessMintNFT, isError:isErrorMintNFT, error:errorMintNFT} = useMintNFT(address, nftName,nftDescription,nftUrl,JSON.stringify(customFields))
-
+  const {
+    request: requestMintNFT,
+    isSuccess: isSuccessMintNFT,
+    isError: isErrorMintNFT,
+    error: errorMintNFT,
+  } = useMintNFT(
+    address,
+    nftName,
+    nftDescription,
+    nftUrl,
+    JSON.stringify(customFields)
+  );
 
   // Soumission du formulaire
   const handleSubmit = (e: React.FormEvent) => {
@@ -139,13 +160,13 @@ export default function CardWithForm() {
     // CODE
 
     requestMintNFT();
-    
+
     setIsNFTAlertOpen(false);
     setIsNFTAlertOpen(true);
   };
 
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="flex items-center justify-center h-screen bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-whitebg-gradient-to-r from-emerald-500 from-10% via-sky-500 via-30% to-indigo-500 to-90%">
       <Card className="w-[550px]">
         <CardHeader className="text-center">
           <CardTitle>Mint Your NFT</CardTitle>
@@ -213,7 +234,7 @@ export default function CardWithForm() {
 
               <Button
                 variant="outline"
-                className="border-white bg-slate-600 text-white"
+                className="border-white bg-gradient-to-r from-green-500 via-yellow-400 to-orange-600 text-white"
                 onClick={(e) => {
                   e.preventDefault();
                   addField();
@@ -240,7 +261,7 @@ export default function CardWithForm() {
                   </Select>
                   <Button
                     variant="outline"
-                    className="border-indigo-500 bg-slate-500 text-black"
+                    className="border-indigo-500 bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-600 text-black"
                     onClick={(e) => {
                       e.preventDefault();
                       setIsDialogOpen(true);
