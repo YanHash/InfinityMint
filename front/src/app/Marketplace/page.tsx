@@ -178,15 +178,22 @@ export default function List() {
                     </SelectTrigger>
                     <SelectContent position="popper" className="text-black">
                       <SelectItem value="0">No Collection</SelectItem>
-                      {collectionList.map((coll) => (
-                        <SelectItem
-                          key={coll.collectionId}
-                          value={coll.collectionId.toString()}
-                          className="text-black"
-                        >
-                          {coll.name}
-                        </SelectItem>
-                      ))}
+                      {collectionList.map(
+                        (coll, index) => (
+                          console.log(
+                            "collectionList : " + coll + " index : " + index
+                          ),
+                          (
+                            <SelectItem
+                              key={coll.collectionId}
+                              value={coll.collectionId.toString()}
+                              className="text-black"
+                            >
+                              {coll.name}
+                            </SelectItem>
+                          )
+                        )
+                      )}
                     </SelectContent>
                   </Select>
                   <Button
