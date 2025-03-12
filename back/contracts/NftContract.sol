@@ -78,7 +78,6 @@ contract NFTContract is ERC721, ERC721Burnable, ERC721URIStorage, Ownable {
         return super.tokenURI(tokenId);
     }
 
-    // Cette fonction permet de générer le token URI pour avoir les informations personalisé du NFT
     function getTokenURI(
         uint256 tokenId,
         string memory name,
@@ -86,10 +85,12 @@ contract NFTContract is ERC721, ERC721Burnable, ERC721URIStorage, Ownable {
         string memory imageUrl,
         string memory attributes
     ) public pure returns (string memory) {
+        string memory tokenIdStr = Strings.toString(tokenId); // Conversion du tokenId en string
+
         bytes memory dataURI = abi.encodePacked(
             "{",
             '"tokenId": "',
-            tokenId,
+            tokenIdStr,
             '",',
             '"name": "',
             name,
@@ -99,12 +100,13 @@ contract NFTContract is ERC721, ERC721Burnable, ERC721URIStorage, Ownable {
             '",',
             '"image": "',
             imageUrl,
-            '"',
+            '",',
             '"attributes": "',
             attributes,
             '"',
             "}"
         );
+
         return
             string(
                 abi.encodePacked(
