@@ -24,7 +24,6 @@ export default function CollectionPage() {
 
     console.log("👉 nftList: ", nftList);
 
-
     const parseTokenUri = (tokenUri: string) => {
         try {
             const formattedJson = tokenUri.replace(/""/g, '", "');
@@ -33,7 +32,7 @@ export default function CollectionPage() {
                 tokenId: parsed.tokenId,
                 name: parsed.name || "NFT inconnu",
                 description: parsed.description || "Pas de description",
-                image: parsed.image?.startsWith("http") ? parsed.image : `${parsed.image}`,
+                image: parsed.image?.startsWith("http") ? parsed.image : "/noImage.jpeg", // Image par défaut
             };
         } catch (error) {
             console.error("❌ Erreur de parsing du tokenUri :", error);
@@ -41,7 +40,7 @@ export default function CollectionPage() {
                 tokenId: "",
                 name: "NFT inconnu",
                 description: "Erreur lors du chargement",
-                image: "/default-nft.png",
+                image: "/noImage.jpeg", // Image par défaut
             };
         }
     };
@@ -93,6 +92,7 @@ export default function CollectionPage() {
                                     width={300}
                                     height={200}
                                     className="w-full h-48 object-cover"
+                                    onError={(e) => (e.currentTarget.src = "/noImage.jpeg")}
                                 />
                                 <CardContent className="p-4">
                                     <h2 className="text-xl font-semibold">{parsedNFT.name}</h2>
