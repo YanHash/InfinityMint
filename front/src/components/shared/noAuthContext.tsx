@@ -26,7 +26,7 @@ export function NoAuth() {
 
         <CardContent className="flex justify-center py-4">
           <img
-            src="@/../public/images/Ecommerce-web-page-bro.webp"
+            src="/images/Ecommerce-web-page-bro.webp"
             alt="Ecommerce Illustration"
             className="w-full h-full max-h-96 object-contain"
           />
