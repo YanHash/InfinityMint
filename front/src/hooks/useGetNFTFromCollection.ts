@@ -7,11 +7,13 @@ interface Listing {
     seller: `0x${string}`;
     price: number;
     tokenUri: string;
+    contractAddress: string; // Ajout de l'adresse du contrat
 }
 
 // Hook pour récupérer les NFTs d'une collection depuis la blockchain
 export const useGetNFTFromCollection = (accountAddress: `0x${string}`, collectionId: string) => {
     const [nftList, setNftList] = useState<Listing[]>([]);
+
     const { data: dataNFTFromBlockchain, error, isPending, refetch } = useReadContract({
         abi,
         address: contractAddress,
@@ -35,10 +37,11 @@ export const useGetNFTFromCollection = (accountAddress: `0x${string}`, collectio
         if (dataNFTFromBlockchain && Array.isArray(dataNFTFromBlockchain)) {
             console.log("📌 Valeur récupérée de la blockchain :", dataNFTFromBlockchain);
 
-            // Transformer les données reçues en ajoutant le décodage du tokenUri
+            // Transformer les données reçues en ajoutant l'adresse du contrat et le décodage du tokenUri
             const nftListNew = dataNFTFromBlockchain.map((item) => ({
                 ...item,
                 tokenUri: decodeBase64(item.tokenUri), // Décodage sécurisé
+                contractAddress, // Ajout de l'adresse du contrat
             }));
 
             setNftList(nftListNew);

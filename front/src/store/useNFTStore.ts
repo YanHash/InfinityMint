@@ -8,6 +8,8 @@ interface NFT {
     image: string;
     seller: string;
     price: number;
+    contractId: string;
+    contractAddress: string;
 }
 
 interface NFTStore {

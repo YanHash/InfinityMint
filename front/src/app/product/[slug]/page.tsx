@@ -7,6 +7,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useNFTStore } from "@/store/useNFTStore";
 import { useBuyNFT } from "@/blockchain/hooks/marketplaceHook";
+import { formatAddress } from "../../../utils/format";
+import { contractAddress } from "@/app/Marketplace/constants";
+
 
 export default function ProductPage() {
     const router = useRouter();
@@ -27,9 +30,11 @@ export default function ProductPage() {
         description: selectedNFT.description || "Aucune description disponible.",
         price: selectedNFT.price || 0,
         imageUrl: selectedNFT.image,
+        seller: selectedNFT.seller,
         blockchain: "Ethereum",
-        contractAddress: "0x0000000000000000000000000000000000000000",
-        tokenId: "N/A",
+        contractId: selectedNFT.contractId,
+        contractAddress: selectedNFT.contractAddress,
+        tokenId: selectedNFT.tokenId,
         standard: "ERC-721",
         attributes: {},
         creator: "Inconnu",
@@ -42,7 +47,7 @@ export default function ProductPage() {
         verifiedCollection: true,
     };
 
-    const { request } = useBuyNFT(product.contractAddress as `0x${string}`, product.tokenId, product.price.toString());
+    const { request } = useBuyNFT(product.contractId as `0x${string}`, product.tokenId, product.price.toString());
 
     return (
         <div className="flex min-h-screen bg-gray-100">
@@ -82,8 +87,16 @@ export default function ProductPage() {
                                 <strong>Blockchain :</strong> {product.blockchain}
                             </p>
                             <p>
-                                <strong>Contrat :</strong>{" "}
-                                <span className="break-all">{product.contractAddress}</span>
+                                <strong>Seller :</strong>{" "}
+                                <span className="break-all">{formatAddress(product.seller)}</span>
+                            </p>
+                            <p>
+                                <strong>Collection ID :</strong>{" "}
+                                <span className="break-all">{formatAddress(product.contractId)}</span>
+                            </p>
+                            <p>
+                                <strong>Contract :</strong>{" "}
+                                <span className="break-all">{formatAddress(product.contractAddress)}</span>
                             </p>
                             <p>
                                 <strong>Token ID :</strong> {product.tokenId}

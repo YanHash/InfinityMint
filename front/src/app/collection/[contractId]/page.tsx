@@ -11,25 +11,16 @@ import { useGetNFTFromCollection } from "@/hooks/useGetNFTFromCollection";
 import { formatAddress } from "../../../utils/format";
 import { useNFTStore } from "@/store/useNFTStore"; // Import du store Zustand
 
-
-
-interface NFT {
-    id: string;
-    seller: `0x${string}`;
-    price: number;
-    tokenUri: string;
-}
-
 export default function CollectionPage() {
     const { address } = useAccount();
     const userAddress = address as `0x${string}`;
 
     const params = useParams();
-    const contractAddress = params?.contractAddress as string;
+    const contractId = params?.contractId as string;
     const [isClient, setIsClient] = useState<boolean>(false);
 
     // Hook pour récupérer les NFTs de la collection depuis la blockchain
-    const { nftList, error, isPending, refetch } = useGetNFTFromCollection(userAddress, contractAddress);
+    const { nftList, error, isPending, refetch } = useGetNFTFromCollection(userAddress, contractId);
 
     console.log("👉 nftList: ", nftList);
 
@@ -90,6 +81,8 @@ export default function CollectionPage() {
                                     image: parsedNFT.image,
                                     seller: nft.seller,
                                     price: nft.price,
+                                    contractId: contractId,
+                                    contractAddress: nft.contractAddress,
                                 })
                             }
                         >
