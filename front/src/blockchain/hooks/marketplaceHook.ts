@@ -1,3 +1,4 @@
+"use client"
 import { useReadContract, useWriteContract } from "wagmi";
 import { abi, contractAddress } from '@/blockchain/config/configMarketplace';
 import { contractAddress as nftContract} from '@/blockchain/config/configNft';

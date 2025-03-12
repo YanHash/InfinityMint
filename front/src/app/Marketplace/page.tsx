@@ -1,20 +1,7 @@
 "use client";
 
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import { useEffect, useState } from "react";
-
-import {
-  WriteMarketplaceBlockchainBuyNFT,
-  WriteMarketplaceBlockchainCreateCollection,
-  WriteMarketplaceBlockchainListNFT,
-} from "@/blockchain/components/writeMarketplaceBlockchain";
-import {
-  GetCollectionFromBlockchain,
-  GetNFTHorsSerieFromBlockchain,
-  GetNFTToCollectionFromBlockchain,
-  GetUserInformationsFromBlockchain,
-} from "@/blockchain/components/getFromBlockain";
 
 import {
   Card,
@@ -37,6 +24,7 @@ import { Button } from "@/components/ui/button";
 import {
   useCreateCollection,
   useGetCollection,
+  useGetNFTHorsSerie,
   useListNFT,
 } from "@/blockchain/hooks/marketplaceHook";
 import {
@@ -56,6 +44,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { GetNFTHorsSerieFromBlockchain } from "@/blockchain/components/getFromBlockain";
 
 export default function List() {
   const { address } = useAccount();
@@ -64,7 +53,7 @@ export default function List() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [collectionName, setCollectionName] = useState("");
   const [collectionDescription, setCollectionDescription] = useState("");
-  const [selectedCollection, setSelectedCollection] = useState("");
+  const [selectedCollection, setSelectedCollection] = useState("0");
   const [isAlertOpenSuccess, setIsAlertOpenSuccess] = useState(false);
   const [isAlertOpenFail, setIsAlertOpenFail] = useState(false);
   const { request, isSuccess, isError } = useCreateCollection(
@@ -86,6 +75,8 @@ export default function List() {
   // États pour lister un NFT
   const [tokenIdNft, setTokenIdNft] = useState<string | null>(null);
   const [price, setPrice] = useState<string | null>(null);
+  const [isNFTAlertOpenFail, setIsNFTAlertOpenFail] = useState(false);
+  const [isNFTAlertOpenSuccess, setIsNFTAlertOpenSuccess] = useState(false);
 
   const {
     request: listNFTRequest,
@@ -115,6 +106,24 @@ export default function List() {
       setIsAlertOpenFail(true);
     }
   }, [isSuccess, isError]);
+
+  useEffect(() => {
+    if (isListNFTSuccess) {
+      console.log("is success" + isListNFTSuccess);
+      setIsNFTAlertOpenSuccess(true);
+    } else if (isListNFTError) {
+      console.log("is Error" + listNFTError);
+      setIsNFTAlertOpenFail(true);
+    }
+  }, [isListNFTSuccess, isListNFTError]);
+
+  const getSelectedCollectionName = () => {
+    if (selectedCollection === "0") return "No Collection";
+    const selectedColl = collectionList.find(
+      (coll) => coll.collectionId.toString() === selectedCollection
+    );
+    return selectedColl ? selectedColl.name : "Select a collection";
+  };
 
   return (
     <div className="flex items-center justify-center h-screen  bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-whitebg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%">
@@ -165,14 +174,14 @@ export default function List() {
                     onValueChange={setSelectedCollection}
                   >
                     <SelectTrigger id="collection">
-                      <SelectValue placeholder="Select a collection" />
+                      <SelectValue placeholder="Select collection" />
                     </SelectTrigger>
                     <SelectContent position="popper" className="text-black">
                       <SelectItem value="0">No Collection</SelectItem>
                       {collectionList.map((coll) => (
                         <SelectItem
                           key={coll.collectionId}
-                          value={coll.collectionId}
+                          value={coll.collectionId.toString()}
                           className="text-black"
                         >
                           {coll.name}
@@ -258,6 +267,59 @@ export default function List() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+
+        {/* AlertDialog pour signaler un echec dans le listing d'un NFT*/}
+        <AlertDialog
+          open={isNFTAlertOpenFail}
+          onOpenChange={setIsNFTAlertOpenFail}
+        >
+          <AlertDialogContent className="bg-white">
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-red-700">
+                Creation Failure.
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                An error occured while creating your Collection. You can Check
+                your network connexion of your Wallet.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogAction
+                onClick={() => {
+                  setIsNFTAlertOpenFail(false);
+                }}
+              >
+                Got It
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
+        {/* AlertDialog pour confirmer le listing d'un NFT*/}
+        <AlertDialog
+          open={isNFTAlertOpenSuccess}
+          onOpenChange={setIsNFTAlertOpenSuccess}
+        >
+          <AlertDialogContent className="bg-white">
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-green-600">
+                NFT Listed!
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                Your NFT has been successfully listed on our Market Place.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogAction
+                onClick={() => {
+                  setIsNFTAlertOpenSuccess(false);
+                }}
+              >
+                Got It
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
 
         {/* AlertDialog pour confirmer la création d'une collection*/}
         <AlertDialog
