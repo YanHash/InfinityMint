@@ -89,6 +89,7 @@ export default function List() {
     isError: isListNFTError,
     error: listNFTError,
   } = useListNFT(address, tokenIdNft ?? "", price ?? "", selectedCollection);
+
   const publishListing = () => {
     console.log("Publishing Listing");
     listNFTRequest();
@@ -146,7 +147,10 @@ export default function List() {
                     <SelectContent position="popper">
                       <SelectItem value="0">No Collection</SelectItem>
                       {collectionList.map((value) => (
-                        <SelectItem key={value.collectionId} value={value.name}>
+                        <SelectItem
+                          key={value.collectionId}
+                          value={value.collectionId}
+                        >
                           {value.name}
                         </SelectItem>
                       ))}
