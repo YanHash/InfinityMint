@@ -1,81 +1,69 @@
 "use client";
 
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useBuyNFT } from "@/blockchain/hooks/marketplaceHook";
-import { useRouter } from "next/navigation";
 import { useNFTStore } from "@/store/useNFTStore";
-import { useEffect } from "react";
+import { useBuyNFT } from "@/blockchain/hooks/marketplaceHook";
 
-interface Product {
-    id: string;
-    name: string;
-    description: string;
-    price: number;
-    imageUrl: string;
-    blockchain: string;
-    contractAddress: string;
-    tokenId: string;
-    standard: string;
-    attributes: {
-        type: string;
-        rarity: string;
-        [key: string]: string | string[];
-    };
-    creator: string;
-    royalties: string;
-    listingType: string;
-    highestBid: string;
-    lastSalePrice: string;
-    marketplaceFees: string;
-    history: {
-        event: string;
-        from: string;
-        to: string;
-        price: string;
-        date: string;
-    }[];
-    verifiedCollection: boolean;
-}
-
-export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
+export default function ProductPage() {
     const router = useRouter();
     const { selectedNFT, clearSelectedNFT } = useNFTStore();
 
     useEffect(() => {
         if (!selectedNFT) {
-            router.push("/"); // Rediriger vers la page principale si aucun NFT n'est stocké
+            router.push("/"); // Redirige vers la collection si aucun NFT n'est sélectionné
         }
     }, [selectedNFT, router]);
 
-    if (!selectedNFT) return null; // Sécurité si le NFT n'est pas encore chargé
+    if (!selectedNFT) return <p className="text-center text-gray-500">NFT non trouvé</p>;
 
+    // Ajout de valeurs par défaut si certaines données sont manquantes
+    const product = {
+        id: selectedNFT.id || "N/A",
+        name: selectedNFT.name || "NFT Inconnu",
+        description: selectedNFT.description || "Aucune description disponible.",
+        price: selectedNFT.price || 0,
+        imageUrl: selectedNFT.image,
+        blockchain: "Ethereum",
+        contractAddress: "0x0000000000000000000000000000000000000000",
+        tokenId: "N/A",
+        standard: "ERC-721",
+        attributes: {},
+        creator: "Inconnu",
+        royalties: "0%",
+        listingType: "Achat immédiat",
+        highestBid: "0",
+        lastSalePrice: "0",
+        marketplaceFees: "2.5%",
+        history: [],
+        verifiedCollection: true,
+    };
+
+    const { request } = useBuyNFT(product.contractAddress as `0x${string}`, product.tokenId, product.price.toString());
 
     return (
         <div className="flex min-h-screen bg-gray-100">
             {/* Image NFT */}
             <div className="w-1/2 h-screen relative">
-                {product.imageUrl ? (
-                    <Image
-                        src={product.imageUrl}
-                        alt={product.name}
-                        layout="fill"
-                        objectFit="cover"
-                        className="rounded-r-lg"
-                    />
-                ) : null}
+                <Image
+                    src={product.imageUrl}
+                    alt={product.name}
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-r-lg"
+                />
             </div>
 
             {/* Détails NFT */}
-            <div className="w-1/2 flex  justify-center items-center p-8">
+            <div className="w-1/2 flex justify-center items-center p-8">
                 <Card className="w-full shadow-lg rounded-2xl p-6 bg-white">
                     <CardContent>
                         <h1 className="text-2xl font-bold text-gray-900">{product.name}</h1>
                         {product.verifiedCollection && (
-                            <span className="text-green-500 text-sm font-semibold">
-                                ✅ Collection Vérifiée
-                            </span>
+                            <span className="text-green-500 text-sm font-semibold">✅ Collection Vérifiée</span>
                         )}
                         <p className="text-gray-600 my-2">{product.description}</p>
 
@@ -118,12 +106,13 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                         <div className="mt-4">
                             <h2 className="text-lg font-semibold text-gray-900">Attributs</h2>
                             <ul className="text-sm text-gray-700">
-                                {Object.entries(product.attributes).map(([key, value]) => (
-                                    <li key={key}>
-                                        <strong>{key} :</strong>{" "}
-                                        {Array.isArray(value) ? value.join(", ") : value}
-                                    </li>
-                                ))}
+                                {Object.entries(product.attributes).length > 0 ? (
+                                    Object.entries(product.attributes).map(([key, value]) => (
+                                        <li key={key}><strong>{key} :</strong> {Array.isArray(value) ? value.join(", ") : value}</li>
+                                    ))
+                                ) : (
+                                    <p>Aucun attribut disponible.</p>
+                                )}
                             </ul>
                         </div>
 
@@ -133,12 +122,15 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                                 Historique des ventes
                             </h2>
                             <ul className="text-sm text-gray-700">
-                                {product.history.map((event, index) => (
-                                    <li key={index}>
-                                        <strong>{event.event} :</strong> {event.from} → {event.to}{" "}
-                                        pour Ξ {event.price} ETH ({event.date})
-                                    </li>
-                                ))}
+                                {product.history.length > 0 ? (
+                                    product.history.map((event, index) => (
+                                        <li key={index}>
+                                            <strong>{event.event} :</strong> {event.from} → {event.to} pour Ξ {event.price} ETH ({event.date})
+                                        </li>
+                                    ))
+                                ) : (
+                                    <p>Aucun historique disponible.</p>
+                                )}
                             </ul>
                         </div>
 
