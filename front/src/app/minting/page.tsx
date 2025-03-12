@@ -63,7 +63,6 @@ export default function CardWithForm() {
   ]);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   const [isNFTAlertOpen, setIsNFTAlertOpen] = useState(false);
 
@@ -100,26 +99,6 @@ export default function CardWithForm() {
   // Supprimer un champ
   const removeField = (id: number) => {
     setCustomFields(customFields.filter((field) => field.id !== id));
-  };
-
-  // Créer une collection
-  const handleCreateCollection = () => {
-    if (!collectionName.trim()) {
-      toast("Collection name cannot be empty!");
-      return;
-    }
-
-    // Simuler une création sur blockchain
-    console.log(`Collection Created: ${collectionName}`);
-
-    // CODE CREATE BLOCKCHAIN :
-
-    request();
-
-    // Afficher la notification et fermer la modale
-    toast(`${collectionName} has been created!`);
-    setIsDialogOpen(false);
-    setIsAlertOpen(true);
   };
 
   // États pour les champs principaux
@@ -242,35 +221,6 @@ export default function CardWithForm() {
               >
                 Add Field
               </Button>
-
-              <div className="flex items-center space-x-4">
-                {/* Sélection de Collection */}
-                <div className="flex flex-col space-y-1.5 w-full">
-                  <Label htmlFor="collection">Collection</Label>
-                  <Select onValueChange={setSelectedCollection}>
-                    <SelectTrigger id="collection">
-                      <SelectValue placeholder="Select a collection" />
-                    </SelectTrigger>
-                    <SelectContent position="popper">
-                      {collectionList.map((value) => (
-                        <SelectItem key={value.collectionId} value={value.name}>
-                          {value.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Button
-                    variant="outline"
-                    className="border-indigo-500 bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-600 text-black"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setIsDialogOpen(true);
-                    }}
-                  >
-                    New Collection
-                  </Button>
-                </div>
-              </div>
             </div>
           </form>
         </CardContent>
@@ -292,76 +242,6 @@ export default function CardWithForm() {
             Mint NFT
           </Button>
         </CardFooter>
-
-        {/* Dialog pour la création de collection */}
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent className="max-w-4xl bg-slate-100">
-            <DialogHeader>
-              <DialogTitle className="text-center">New Collection</DialogTitle>
-              <DialogDescription className="text-center">
-                Fill your Collection Fields and save once done!
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label>Name</Label>
-                <Input
-                  placeholder="Collection Name"
-                  className="col-span-3"
-                  value={collectionName}
-                  onChange={(e) => setCollectionName(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label>Name</Label>
-                <Input
-                  placeholder="Collection Description"
-                  className="col-span-3"
-                  value={collectionDescription}
-                  onChange={(e) => setCollectionDescription(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="ownerAddress" className="text-left">
-                  Owner Address
-                </Label>
-                <Input
-                  id="ownerAddress"
-                  value={address}
-                  className="col-span-3"
-                  readOnly
-                />
-              </div>
-            </div>
-            <DialogFooter>
-              <Button onClick={handleCreateCollection} type="submit">
-                Create
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-
-        {/* AlertDialog pour confirmer la création d'une collection*/}
-        <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
-          <AlertDialogContent className="bg-white">
-            <AlertDialogHeader>
-              <AlertDialogTitle>Collection Created!</AlertDialogTitle>
-              <AlertDialogDescription>
-                Your collection "{collectionName}" has been successfully
-                created.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogAction onClick={() => setIsAlertOpen(false)}>
-                Got It
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
 
         {/* AlertDialog pour confirmer la création d'un NFT*/}
         <AlertDialog open={isNFTAlertOpen} onOpenChange={setIsNFTAlertOpen}>
