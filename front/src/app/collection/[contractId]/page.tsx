@@ -36,7 +36,7 @@ export default function CollectionPage() {
                 tokenId: parsed.tokenId,
                 name: parsed.name || "NFT inconnu",
                 description: parsed.description || "Pas de description",
-                image: parsed.image?.startsWith("http") ? parsed.image : "/noImage.jpeg", // Image par défaut
+                image: parsed.image || "/noImage.jpeg" // Image par défaut
             };
         } catch (error) {
             console.error("❌ Erreur de parsing du tokenUri :", error);
