@@ -95,7 +95,7 @@ export default function CollectionsPage() {
                 {displayedCollections.map((collection) => (
                     <Card key={collection.id} className="rounded-2xl shadow-lg overflow-hidden">
                         <Image
-                            src={collection.imageUrl}
+                            src="{collection.imageUrl}"
                             alt={collection.name}
                             width={300}
                             height={200}

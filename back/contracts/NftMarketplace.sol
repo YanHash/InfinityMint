@@ -300,9 +300,9 @@ contract NFTMarketplace is Initializable{
         Listing memory listing = listings[nftContract][tokenId];
         require(listing.price > 0, "NFT not for sale");
         require(msg.value >= listing.price, "Insufficient payment");
-
-        uint256 fee = (listing.price * 10) / 100;
-        uint256 amountForSeller = listing.price - fee ;
+        uint256 price = listing.price * 10**18;
+        uint256 fee = (price * 10) / 100 ;
+        uint256 amountForSeller = (price * 90) / 100;
 
         console.log("prix de base : ", msg.value);
         console.log("fee :", fee);
@@ -314,13 +314,16 @@ contract NFTMarketplace is Initializable{
         //payable(listing.seller).transfer(amountForSeller);
         // payable(address(this)).transfer(fee);
 
-        // Transférer les fonds au destinataire (90 %)
-        (bool successSeller, ) = payable(listing.seller).call{value: amountForSeller}("");
-        require(successSeller, "Transfert au vendeur a echoue");
+        payable(listing.seller).transfer(msg.value);
+        // payable(owner).transfer(fee);
 
-        // Transférer les frais au contrat (10 %)
-        (bool successFee, ) = payable(owner).call{value: fee}("");
-        require(successFee, "Transfert des frais au contrat a echoue");
+        // Transférer les fonds au destinataire (90 %)
+        // (bool successSeller, ) = payable(listing.seller).call{value: amountForSeller}("");
+        // require(successSeller, "Transfert au vendeur a echoue");
+
+        // // Transférer les frais au contrat (10 %)
+        // (bool successFee, ) = payable(owner).call{value: fee}("");
+        // require(successFee, "Transfert des frais au contrat a echoue");
 
         delete listings[nftContract][tokenId];
 
@@ -344,7 +347,13 @@ contract NFTMarketplace is Initializable{
             
         }
 
+        console.log("Argent du contrat : ",getBalance());
+
         emit NFTSold(nftContract, tokenId, msg.sender, listing.price);
+    }
+
+    function getBalance() public view returns (uint256) {
+        return address(this).balance;
     }
 
     // Fonction pour annuler une liste de vente
