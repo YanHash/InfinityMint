@@ -56,7 +56,6 @@ export function LoadingButton() {
 
   return (
     <button
-      type="button"
       className="flex items-center px-4 py-2 text-white font-semibold rounded-md bg-gray-400 cursor-not-allowed"
       disabled
     >

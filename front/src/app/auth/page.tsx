@@ -1,8 +1,6 @@
-// app/page.tsx
 'use client';
 import { MenubarAuth } from "@/components/shared/authHeader";
 import { NoAuth } from "@/components/shared/noAuthContext";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from 'wagmi'
 
 export default function Home() {
