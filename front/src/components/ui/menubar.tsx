@@ -291,12 +291,14 @@ const MainMenubar = () => {
                     <SearchIcon className="h-4 w-4 mr-1.5"/>
                     <Input type="search" placeholder="Search a NFT"
                            className="ml-auto border-0 h-8 font-semibold"
-                           /*todo onSubmit={}*//>
+                        /*todo onSubmit={}*//>
                 </MenubarTrigger>
             </MenubarMenu>
             <MenubarMenu>
                 <MenubarTrigger>
-                    <Avatar>
+                    <Avatar
+                        onClick={() => router.push('/auth')}
+                    >
                         <AvatarImage src="https://github.com/shadcn.png"/>
                         <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
