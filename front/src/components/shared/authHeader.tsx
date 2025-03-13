@@ -62,8 +62,10 @@ export function MenubarAuth({address, isConnected}: { address: string; isConnect
                 {/* 🔴 Logout Button */}
                 <MenubarMenu>
                     <MenubarTrigger>
-                        <Button variant="outline" className={"bg-red-500 text-white ml-auto"}
-                                onClick={() => disconnect}>Disconnect</Button>
+                        <div>
+                            <Button variant="outline" className={"bg-red-500 text-white ml-auto"}
+                                    onClick={() => disconnect}>Disconnect</Button>
+                        </div>
                     </MenubarTrigger>
                 </MenubarMenu>
             </Menubar>
