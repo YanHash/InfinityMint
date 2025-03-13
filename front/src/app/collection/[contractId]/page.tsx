@@ -9,9 +9,8 @@ import Link from "next/link";
 import { useAccount } from "wagmi";
 import { useGetNFTFromCollection } from "@/hooks/useGetNFTFromCollection";
 import { formatAddress } from "../../../utils/format";
-import { useNFTStore } from "@/store/useNFTStore"; // Import du store Zustand
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select"
-
+import { useNFTStore } from "@/store/useNFTStore";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function CollectionPage() {
     const { address } = useAccount();
@@ -22,8 +21,6 @@ export default function CollectionPage() {
     const [isClient, setIsClient] = useState<boolean>(false);
     const [filter, setFilter] = useState<string>("");
 
-
-    // Hook pour récupérer les NFTs de la collection depuis la blockchain
     const { nftList, error, isPending, refetch } = useGetNFTFromCollection(userAddress, contractId);
 
     console.log("👉 nftList: ", nftList);
@@ -36,7 +33,9 @@ export default function CollectionPage() {
                 tokenId: parsed.tokenId,
                 name: parsed.name || "NFT inconnu",
                 description: parsed.description || "Pas de description",
-                image: parsed.image || "/noImage.jpeg", // Image par défaut
+                image: parsed.image.startsWith("ipfs://")
+                    ? `https://gateway.pinata.cloud/ipfs/${parsed.image.replace("ipfs://", "")}`
+                    : parsed.image || "/noImage.jpeg",
             };
         } catch (error) {
             console.error("❌ Erreur de parsing du tokenUri :", error);
@@ -44,7 +43,7 @@ export default function CollectionPage() {
                 tokenId: "",
                 name: "NFT inconnu",
                 description: "Erreur lors du chargement",
-                image: "/noImage.jpeg", // Image par défaut
+                image: "/noImage.jpeg",
             };
         }
     };
@@ -56,21 +55,16 @@ export default function CollectionPage() {
     useEffect(() => {
         switch (filter) {
             case "lowToHigh": {
-                nftList.sort(function (a, b) {
-                    return b.price - a.price;
-                });
-                break
+                nftList.sort((a, b) => b.price - a.price);
+                break;
             }
             case "highToLow": {
-                nftList.sort(function (a, b) {
-                    return a.price - b.price;
-                });
-                break
+                nftList.sort((a, b) => a.price - b.price);
+                break;
             }
             case "newest": {
                 nftList.sort();
-                //todo check
-                break
+                break;
             }
         }
     }, [filter]);
@@ -81,7 +75,7 @@ export default function CollectionPage() {
                 🔄 Rafraîchir les NFTs
             </Button>
 
-            <div className={"mb-5 w-1/4"}>
+            <div className="mb-5 w-1/4">
                 <Select onValueChange={(filtre) => setFilter(filtre)}>
                     <SelectTrigger>
                         <SelectValue placeholder="Filter" />
