@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import { formatAddress } from "../utils/format";
+import { useGetNFTFromCollection } from "@/hooks/useGetNFTFromCollection";
+
 
 import {
   useAccount,
@@ -21,6 +23,37 @@ export default function CollectionsPage() {
 
   console.log("👉 collectionList: ", collectionList);
 
+  // Hook pour récupérer les NFTs de la collection depuis la blockchain
+  const { nftList } = useGetNFTFromCollection(userAddress, collectionList[0]?.collectionId);
+
+  console.log("👉 nftList: ", nftList);
+
+  const parseTokenUri = (tokenUri: string) => {
+    try {
+      const formattedJson = tokenUri.replace(/""/g, '", "');
+      const parsed = JSON.parse(formattedJson);
+      return {
+        tokenId: parsed.tokenId,
+        name: parsed.name || "NFT inconnu",
+        description: parsed.description || "Pas de description",
+        image: parsed.image || "/noImage.jpeg", // Image par défaut
+      };
+    } catch (error) {
+      console.error("❌ Erreur de parsing du tokenUri :", error);
+      return {
+        tokenId: "",
+        name: "NFT inconnu",
+        description: "Erreur lors du chargement",
+        image: "/noImage.jpeg", // Image par défaut
+      };
+    }
+  };
+
+  const parsedNFT = parseTokenUri(nftList[0]?.tokenUri);
+
+  console.log("🔵 parsedNFT: ", parsedNFT);
+
+
 
   return (
     <div className="container mx-auto p-6">
@@ -29,7 +62,7 @@ export default function CollectionsPage() {
         {collectionList.map((collection) => (
           <Card key={collection.collectionId} className="rounded-2xl shadow-lg overflow-hidden">
             <Image
-              src="/noImage.jpeg"
+              src={parsedNFT.image || "/noImage.jpeg"}
               alt={collection.name}
               width={300}
               height={200}
