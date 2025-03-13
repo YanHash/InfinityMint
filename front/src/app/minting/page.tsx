@@ -26,6 +26,7 @@ import { Trash2 } from "lucide-react";
 import { useAccount } from "wagmi";
 import { useMintNFT } from "@/blockchain/hooks/nftHooks";
 import { Loader2 } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 
 
 interface CustomField {
@@ -43,6 +44,8 @@ export default function CardWithForm() {
   const [ipfsUrl, setIpfsUrl] = useState<string>("");
   const [uploading, setUploading] = useState<boolean>(false);
   const [customFields, setCustomFields] = useState<CustomField[]>([{ id: Date.now(), name: "", value: "" }]);
+  const [isGenerating, setIsGenerating] = useState(false); // Toggle pour choisir entre génération ou upload
+
 
   const [prompt, setPrompt] = useState<string>("");
   const [imageUrl, setImageUrl] = useState<string>("");
@@ -156,47 +159,30 @@ export default function CardWithForm() {
                 <Label>Description</Label>
                 <Input value={nftDescription} onChange={(e) => setNftDescription(e.target.value)} placeholder="Description of your NFT" />
               </div>
-              <div className="flex flex-col space-y-1.5">
-                <h1 className="text-2xl font-semibold">Générer une image ou uploader</h1>
-
-                <Input
-                  type="text"
-                  placeholder="Décrivez l'image à générer..."
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  className="w-full max-w-md"
-                />
-
-                <Button onClick={generateImage} disabled={loading || !prompt.trim()} className="w-full max-w-md">
-                  {loading ? <Loader2 className="animate-spin" /> : "Générer une image"}
-                </Button>
-
-                {error && <p className="text-red-500">{error}</p>}
-
-                {imageUrl && (
-                  <Card className="mt-4 w-full max-w-md">
-                    <CardContent className="p-4 flex flex-col items-center">
-                      <img src={imageUrl} alt="Image générée" className="rounded-lg shadow-md" />
-                      {ipfsUrl && (
-                        <a
-                          href={ipfsUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="mt-2 text-blue-500 underline"
-                        >
-                          Voir sur IPFS
-                        </a>
-                      )}
-                    </CardContent>
-                  </Card>
-                )}
-                <Label>Upload File</Label>
-                <Input type="file" onChange={handleFileChange} />
-                <Button onClick={uploadToPinata} disabled={uploading}>
-                  {uploading ? "Uploading..." : "Upload to Pinata"}
-                </Button>
-                {ipfsUrl && <p>IPFS URL: {ipfsUrl}</p>}
+              <div className="flex justify-between my-4">
+                <Label>Mode Génération d'image</Label>
+                <Switch checked={isGenerating} onCheckedChange={setIsGenerating} className="" />
               </div>
+
+              {isGenerating ? (
+                <>
+                  <Label>Prompt pour l'image</Label>
+                  <Input type="text" value={prompt} onChange={(e) => setPrompt(e.target.value)} placeholder="Décrivez l'image..." />
+                  <Button onClick={generateImage} disabled={loading || !prompt.trim()}>
+                    {loading ? <Loader2 className="animate-spin" /> : "Générer l'image"}
+                  </Button>
+                  {imageUrl && <img src={imageUrl} alt="Generated" className="mt-2 rounded-lg shadow-md" />}
+                </>
+              ) : (
+                <>
+                  <Label>Upload une image</Label>
+                  <Input type="file" onChange={handleFileChange} />
+                  <Button onClick={uploadToPinata} disabled={uploading}>
+                    {uploading ? "Uploading..." : "Upload to Pinata"}
+                  </Button>
+                </>
+              )}
+
               {customFields.map((field) => (
                 <div key={field.id} className="flex items-center space-x-2">
                   <Input value={field.name} onChange={(e) => updateField(field.id, "name", e.target.value)} placeholder="Field Name" />
