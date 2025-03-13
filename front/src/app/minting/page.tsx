@@ -25,6 +25,8 @@ import { Label } from "@/components/ui/label";
 import { Trash2 } from "lucide-react";
 import { useAccount } from "wagmi";
 import { useMintNFT } from "@/blockchain/hooks/nftHooks";
+import { Loader2 } from "lucide-react";
+
 
 interface CustomField {
   id: number;
@@ -41,6 +43,11 @@ export default function CardWithForm() {
   const [ipfsUrl, setIpfsUrl] = useState<string>("");
   const [uploading, setUploading] = useState<boolean>(false);
   const [customFields, setCustomFields] = useState<CustomField[]>([{ id: Date.now(), name: "", value: "" }]);
+
+  const [prompt, setPrompt] = useState<string>("");
+  const [imageUrl, setImageUrl] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
   const { request: requestMintNFT } = useMintNFT(address, nftName, nftDescription, ipfsUrl, JSON.stringify(customFields));
 
@@ -94,6 +101,43 @@ export default function CardWithForm() {
     setIsNFTAlertOpen(true);
   };
 
+  const generateImage = async () => {
+    if (!prompt.trim()) return;
+
+    setLoading(true);
+    setImageUrl("");
+    setIpfsUrl("");
+    setError("");
+
+    try {
+
+      const response = await fetch("/api/generate-image", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt }),
+      });
+
+
+
+      const data: { imageUrl?: string; ipfsUrl?: string; error?: string } = await response.json();
+
+      if (!response.ok || data.error) {
+        setError(data.error || "Une erreur est survenue.");
+        setLoading(false);
+        return;
+      }
+
+      setImageUrl(data.imageUrl || "");
+      setIpfsUrl(data.ipfsUrl || "");
+    } catch (error) {
+      setError("Erreur de connexion au serveur.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="flex items-center justify-center h-screen bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
       <Card className="w-[550px]">
@@ -113,6 +157,39 @@ export default function CardWithForm() {
                 <Input value={nftDescription} onChange={(e) => setNftDescription(e.target.value)} placeholder="Description of your NFT" />
               </div>
               <div className="flex flex-col space-y-1.5">
+                <h1 className="text-2xl font-semibold">Générer une image ou uploader</h1>
+
+                <Input
+                  type="text"
+                  placeholder="Décrivez l'image à générer..."
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  className="w-full max-w-md"
+                />
+
+                <Button onClick={generateImage} disabled={loading || !prompt.trim()} className="w-full max-w-md">
+                  {loading ? <Loader2 className="animate-spin" /> : "Générer une image"}
+                </Button>
+
+                {error && <p className="text-red-500">{error}</p>}
+
+                {imageUrl && (
+                  <Card className="mt-4 w-full max-w-md">
+                    <CardContent className="p-4 flex flex-col items-center">
+                      <img src={imageUrl} alt="Image générée" className="rounded-lg shadow-md" />
+                      {ipfsUrl && (
+                        <a
+                          href={ipfsUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-2 text-blue-500 underline"
+                        >
+                          Voir sur IPFS
+                        </a>
+                      )}
+                    </CardContent>
+                  </Card>
+                )}
                 <Label>Upload File</Label>
                 <Input type="file" onChange={handleFileChange} />
                 <Button onClick={uploadToPinata} disabled={uploading}>
