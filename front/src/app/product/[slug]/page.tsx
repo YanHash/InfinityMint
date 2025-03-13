@@ -150,7 +150,7 @@ export default function ProductPage() {
                             </ul>
                         </div>
 
-                        <Button onClick={() => console.log(product.tokenId)} className="mt-4 w-full">
+                        <Button onClick={request} className="mt-4 w-full">
                             Acheter Maintenant
                         </Button>
                     </CardContent>

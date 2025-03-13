@@ -229,8 +229,6 @@ export const useBuyNFT  = (accountAddress : `0x${string}` | undefined, tokenId: 
             value: parseEther(price),
         });
 
-        console.log(error)
-
     }
 
     return {request, isSuccess, isError, error}

@@ -269,14 +269,31 @@ contract NFTMarketplace is Initializable{
         require(listing.price > 0, "NFT not for sale");
         require(msg.value >= listing.price, "Insufficient payment");
 
-        uint256 fee = listing.price*0.1 ether;
-        uint256 amountForSeller = listing.price*0.9 ether ;
+        uint256 fee = (listing.price * 10) / 100;
+        uint256 amountForSeller = listing.price - fee ;
+
+        console.log("prix de base : ", msg.value);
+        console.log("fee :", fee);
+        console.log("amountForSeller :", amountForSeller);
+
         
+        
+
+        //payable(listing.seller).transfer(amountForSeller);
+        // payable(address(this)).transfer(fee);
+
+        // Transférer les fonds au destinataire (90 %)
+        (bool successSeller, ) = payable(listing.seller).call{value: amountForSeller}("");
+        require(successSeller, "Transfert au vendeur a echoue");
+
+        // Transférer les frais au contrat (10 %)
+        // (bool successFee, ) = address(this).call{value: fee}("");
+        // require(successFee, "Transfert des frais au contrat a echoue");
+
         delete listings[nftContract][tokenId];
 
-        payable(listing.seller).transfer(amountForSeller);
-        payable(address(this)).transfer(fee);
-
+        console.log("Listing supprime");
+        console.log("Tranfert fond ok");
 
         IERC721(nftContract).safeTransferFrom(listing.seller, msg.sender, tokenId);
 
