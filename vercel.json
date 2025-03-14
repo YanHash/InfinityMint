@@ -1,5 +1,4 @@
 {
-  "rootDirectory": "front",
   "build": {
     "src": "front/package.json",
     "use": "@vercel/static-build",
