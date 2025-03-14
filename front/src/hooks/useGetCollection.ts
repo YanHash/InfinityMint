@@ -1,6 +1,6 @@
-import {useEffect, useState} from "react";
-import {useReadContract} from "wagmi";
-import {abi, contractAddress} from "../blockchain/config/configMarketplace"; // Vérifiez que le chemin est correct
+import { useEffect, useState } from "react";
+import { useReadContract } from "wagmi";
+import { abi, contractAddress } from "../blockchain/config/configMarketplace"; // Vérifiez que le chemin est correct
 
 interface Collection {
     collectionId: string;
@@ -8,8 +8,8 @@ interface Collection {
     owner: `0x${string}`;
     description: string;
     totalSupply: number;
-    floorPrice: number;
-    volumeTraded: number;
+    volumeTraded?: number;
+    floorPrice?: number
 }
 
 export const useGetCollection = (accountAddress: `0x${string}`) => {
@@ -20,7 +20,7 @@ export const useGetCollection = (accountAddress: `0x${string}`) => {
 
 
     // Récupération des collections depuis la blockchain
-    const {data, error, isPending, refetch} = useReadContract({
+    const { data, error, isPending, refetch } = useReadContract({
         abi,
         address: contractAddress,
         functionName: "getTenCollections",

@@ -314,8 +314,8 @@ contract NFTMarketplace is Initializable{
         //payable(listing.seller).transfer(amountForSeller);
         // payable(address(this)).transfer(fee);
 
-        payable(listing.seller).transfer(msg.value);
-        // payable(owner).transfer(fee);
+        payable(listing.seller).transfer(amountForSeller);
+        payable(owner).transfer(fee);
 
         // Transférer les fonds au destinataire (90 %)
         // (bool successSeller, ) = payable(listing.seller).call{value: amountForSeller}("");
