@@ -147,13 +147,16 @@ export const useListNFT = (accountAddress : `0x${string}` | undefined, tokenId:s
     // Pour faire fonctionner le vente des NFT, il faut approuver la marketplace NFT
 
     const approve = () => {
+        console.log("passage ici ")
         writeContract({
             address: nftContract,
             abi: abiNFT,
             functionName: "approve",
-            args: [ contractAddress ],
-            account:accountAddress,
+            args: [contractAddress],
+            account: accountAddress,
         });
+        console.log(isSuccessContract)
+        console.log(errorContract)
     }
     
     const listNFT = () => {
@@ -161,8 +164,8 @@ export const useListNFT = (accountAddress : `0x${string}` | undefined, tokenId:s
             address: contractAddress,
             abi: abi,
             functionName: "listNFT",
-            args: [ nftContract, tokenId, price, collectionId ],
-            account:accountAddress
+            args: [nftContract, tokenId, price, collectionId],
+            account: accountAddress,
         });
 
         setIsSuccess(isSuccessContract)
