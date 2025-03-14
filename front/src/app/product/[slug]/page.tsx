@@ -1,20 +1,19 @@
 "use client";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import {useEffect} from "react";
+import {useRouter} from "next/navigation";
 import Image from "next/image";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { useNFTStore } from "@/store/useNFTStore";
-import { useBuyNFT } from "@/blockchain/hooks/marketplaceHook";
-import { formatAddress } from "../../../utils/format";
-import { contractAddress } from "@/app/Marketplace/constants";
+import {Card, CardContent} from "@/components/ui/card";
+import {Button} from "@/components/ui/button";
+import {useNFTStore} from "@/store/useNFTStore";
+import {useBuyNFT} from "@/blockchain/hooks/marketplaceHook";
+import {formatAddress} from "@/utils/format";
 
-import { useAccount } from "wagmi";
+import {useAccount} from "wagmi";
 
 export default function ProductPage() {
     const router = useRouter();
-    const { selectedNFT, clearSelectedNFT } = useNFTStore();
+    const {selectedNFT} = useNFTStore();
 
     useEffect(() => {
         if (!selectedNFT) {
@@ -48,9 +47,9 @@ export default function ProductPage() {
         verifiedCollection: true,
     };
 
-    const { address, isConnected } = useAccount();
+    const {address} = useAccount();
 
-    const { request } = useBuyNFT(address, product.tokenId, product.price.toString());
+    const {request} = useBuyNFT(address, product.tokenId, product.price.toString());
 
     return (
         <div className="flex min-h-screen bg-gray-100">
@@ -124,7 +123,10 @@ export default function ProductPage() {
                             <ul className="text-sm text-gray-700">
                                 {Object.entries(product.attributes).length > 0 ? (
                                     Object.entries(product.attributes).map(([key, value]) => (
-                                        <li key={key}><strong>{key} :</strong> {Array.isArray(value) ? value.join(", ") : value}</li>
+                                        <li key={key}>
+                                            <strong>{key} :</strong>{" "}
+                                            {Array.isArray(value) ? (value as string[]).join(", ") : (value as string)}
+                                        </li>
                                     ))
                                 ) : (
                                     <p>Aucun attribut disponible.</p>
@@ -141,7 +143,8 @@ export default function ProductPage() {
                                 {product.history.length > 0 ? (
                                     product.history.map((event, index) => (
                                         <li key={index}>
-                                            <strong>{event.event} :</strong> {event.from} → {event.to} pour Ξ {event.price} ETH ({event.date})
+                                            <strong>{event.event} :</strong> {event.from} → {event.to} pour
+                                            Ξ {event.price} ETH ({event.date})
                                         </li>
                                     ))
                                 ) : (
