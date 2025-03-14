@@ -23,8 +23,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   useCreateCollection,
-  useGetCollection,
-  useGetNFTHorsSerie,
   useGetUserInformations,
   useListNFT,
 } from "@/blockchain/hooks/marketplaceHook";
@@ -45,7 +43,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { GetNFTHorsSerieFromBlockchain } from "@/blockchain/components/getFromBlockain";
 
 export default function List() {
   const { address } = useAccount();
@@ -82,7 +79,6 @@ export default function List() {
     request: listNFTRequest,
     isSuccess: isListNFTSuccess,
     isError: isListNFTError,
-    error: listNFTError,
   } = useListNFT(address, tokenIdNft ?? "", price ?? "", selectedCollection);
 
   const publishListing = () => {
@@ -112,13 +108,12 @@ export default function List() {
       console.log("is success" + isListNFTSuccess);
       setIsNFTAlertOpenSuccess(true);
     } else if (isListNFTError) {
-      console.log("is Error" + listNFTError);
       setIsNFTAlertOpenFail(true);
     }
   }, [isListNFTSuccess, isListNFTError]);
 
   return (
-    <div className="flex items-center justify-center h-screen  bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-whitebg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%">
+    <div className="flex items-center justify-center h-screen  bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-whitebg-gradient-to-r from-10% via-30% to-90%">
       <Card className="w-3/4">
         <CardHeader className="flex flex-col items-center text-2xl">
           <CardTitle className="text-4xl">List your NFT for selling</CardTitle>
@@ -171,10 +166,7 @@ export default function List() {
                     <SelectContent position="popper" className="text-black">
                       <SelectItem value="0">No Collection</SelectItem>
                       {userCollectionList?.map(
-                        (coll, index) => (
-                          console.log(
-                            "userCollectionList : " + coll + " index : " + index
-                          ),
+                        (coll) => (
                           (
                             <SelectItem
                               key={coll.collectionId}

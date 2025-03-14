@@ -1,27 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import { formatAddress } from "../utils/format";
-import { useGetNFTFromCollection } from "@/hooks/useGetNFTFromCollection";
+import { formatAddress } from "@/utils/format";
 
 
-import {
-  useAccount,
-} from "wagmi";
+import { useAccount, } from "wagmi";
 import { useGetCollection } from "@/hooks/useGetCollection";
 import { useGetCollectionPreviews } from "@/hooks/useGetCollectionPreviews";
 
 
 export default function CollectionsPage() {
-  const { address, isConnected } = useAccount();
+  const { address } = useAccount();
   const userAddress = address as `0x${string}`;
 
   // Récupérer la liste des collections
-  const { collectionList, error, isPending, setSkipCollection, refetch } = useGetCollection(userAddress);
+  const { collectionList } = useGetCollection(userAddress);
 
   // Vérifier que la liste des collections est bien chargée avant d'exécuter le hook
   const collectionIds = collectionList.length > 0 ? collectionList.map((collection) => collection.collectionId) : [];
@@ -52,7 +48,7 @@ export default function CollectionsPage() {
                 <p className="text-gray-700 text-sm">Floor Price: {collection.floorPrice} ETH</p>
                 <p className="text-gray-700 text-sm">Volume Traded: {collection.volumeTraded} ETH</p>
                 <p className="text-gray-700 text-sm">Owner: {formatAddress(collection.owner)}</p>
-                {true && <span className="text-green-500 text-sm font-bold">✔ Verified</span>}
+                {<span className="text-green-500 text-sm font-bold">✔ Verified</span>}
                 <Link href={`/collection/${collection.collectionId}`}>
                   <Button className="mt-3 w-full">Voir les NFT</Button>
                 </Link>
