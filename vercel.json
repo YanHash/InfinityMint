@@ -5,6 +5,5 @@
     "config": {
       "distDir": "front/build"
     }
-  },
-  "eslint": false
+  }
 }
