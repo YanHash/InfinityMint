@@ -16,9 +16,6 @@ export const useGetCollection = (accountAddress: `0x${string}`) => {
     const [skipCollection, setSkipCollection] = useState<number>(0);
     const [collectionList, setCollectionList] = useState<Collection[]>([]);
 
-    console.log("🚀 useGetCollection");
-
-
     // Récupération des collections depuis la blockchain
     const { data, error, isPending, refetch } = useReadContract({
         abi,
