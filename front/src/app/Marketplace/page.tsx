@@ -25,6 +25,7 @@ import {
   useCreateCollection,
   useGetCollection,
   useGetNFTHorsSerie,
+  useGetUserInformations,
   useListNFT,
 } from "@/blockchain/hooks/marketplaceHook";
 import {
@@ -62,15 +63,15 @@ export default function List() {
     collectionDescription
   );
 
-  const { collectionList, refetch: refetchCollection } = useGetCollection(
-    address as `0x${string}`
-  );
+  const { user, refetch } = useGetUserInformations(address as `0x${string}`)
+  const userCollectionList = user?.collections
+  console.log("⏺️ userCollectionList: ", userCollectionList);
 
   useEffect(() => {
     if (isSuccess) {
-      refetchCollection();
+      refetch();
     }
-  }, [isSuccess, refetchCollection]);
+  }, [isSuccess, refetch]);
 
   // États pour lister un NFT
   const [tokenIdNft, setTokenIdNft] = useState<string | null>(null);
@@ -117,13 +118,6 @@ export default function List() {
     }
   }, [isListNFTSuccess, isListNFTError]);
 
-  const getSelectedCollectionName = () => {
-    if (selectedCollection === "0") return "No Collection";
-    const selectedColl = collectionList.find(
-      (coll) => coll.collectionId.toString() === selectedCollection
-    );
-    return selectedColl ? selectedColl.name : "Select a collection";
-  };
 
   return (
     <div className="flex items-center justify-center h-screen  bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-whitebg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%">
@@ -178,10 +172,10 @@ export default function List() {
                     </SelectTrigger>
                     <SelectContent position="popper" className="text-black">
                       <SelectItem value="0">No Collection</SelectItem>
-                      {collectionList.map(
+                      {userCollectionList?.map(
                         (coll, index) => (
                           console.log(
-                            "collectionList : " + coll + " index : " + index
+                            "userCollectionList : " + coll + " index : " + index
                           ),
                           (
                             <SelectItem
