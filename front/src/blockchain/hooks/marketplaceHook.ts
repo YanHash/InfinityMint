@@ -142,6 +142,7 @@ export const useListNFT = (accountAddress : `0x${string}` | undefined, tokenId:s
     const { writeContract, isSuccess:isSuccessContract, isError:isErrorContract, error:errorContract } = useWriteContract();
     const [ isSuccess, setIsSuccess] = useState<boolean>();
     const [ isError, setIsError] = useState<boolean>();
+    const [isListed, setIsListed] = useState<boolean>(false);
 
 
     // Pour faire fonctionner le vente des NFT, il faut approuver la marketplace NFT
@@ -152,7 +153,7 @@ export const useListNFT = (accountAddress : `0x${string}` | undefined, tokenId:s
             address: nftContract,
             abi: abiNFT,
             functionName: "approve",
-            args: [contractAddress],
+            args: [contractAddress, tokenId],
             account: accountAddress,
         });
         console.log(isSuccessContract)
@@ -173,17 +174,22 @@ export const useListNFT = (accountAddress : `0x${string}` | undefined, tokenId:s
     }
 
     useEffect(()=>{
-        if(isSuccess){
+        console.log("passage useEffect isSuccessContract : " + isSuccessContract)
+        if(isSuccessContract && !isListed){
+            console.log("succes Ok")
+            setIsListed(true)
             listNFT()
         }
-    },[isSuccess])
+    },[isSuccessContract])
 
     useEffect(()=> {
-        if(isError){
+        console.log("passage useEffect isErrorContract : " + isErrorContract)
+        if(isErrorContract){
+            console.log("Erorr test")
             setIsSuccess(isSuccessContract)
             setIsError(isErrorContract)
         }
-    },[isError])
+    },[isErrorContract])
     
     
     const request = () => {
