@@ -1,15 +1,15 @@
 "use client";
 
-import {useEffect, useState} from "react";
-import {Card, CardContent} from "@/components/ui/card";
-import {Button} from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 
-import {cn} from "@/lib/utils"
-import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList,} from "@/components/ui/command"
-import {Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover"
-import {Check, ChevronsUpDown} from "lucide-react";
+import { cn } from "@/lib/utils"
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, } from "@/components/ui/command"
+import { Popover, PopoverContent, PopoverTrigger, } from "@/components/ui/popover"
+import { Check, ChevronsUpDown } from "lucide-react";
 
 interface Collection {
     id: string;
@@ -56,12 +56,12 @@ export default function CollectionsPage() {
                             {value
                                 ? collections.find((collection) => collection.name === value)?.name
                                 : "Select a category"}
-                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50"/>
+                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-[200px] p-0">
                         <Command>
-                            <CommandInput placeholder="Search framework..."/>
+                            <CommandInput placeholder="Search framework..." />
                             <CommandList>
                                 <CommandEmpty>No framework found.</CommandEmpty>
                                 <CommandGroup>
@@ -72,7 +72,6 @@ export default function CollectionsPage() {
                                             onSelect={(currentValue: string) => {
                                                 setValue(currentValue === value ? "" : currentValue)
                                                 setOpen(false)
-                                                console.log(currentValue)
                                                 currentValue === value ? setDisplayedCollections(collections) : setDisplayedCollections([collection]);
                                             }}
                                         >

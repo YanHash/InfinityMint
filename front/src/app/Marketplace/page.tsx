@@ -65,7 +65,6 @@ export default function List() {
 
   const { user, refetch } = useGetUserInformations(address as `0x${string}`)
   const userCollectionList = user?.collections
-  console.log("⏺️ userCollectionList: ", userCollectionList);
 
   useEffect(() => {
     if (isSuccess) {
@@ -117,7 +116,6 @@ export default function List() {
       setIsNFTAlertOpenFail(true);
     }
   }, [isListNFTSuccess, isListNFTError]);
-
 
   return (
     <div className="flex items-center justify-center h-screen  bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-whitebg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%">
