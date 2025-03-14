@@ -1,7 +1,7 @@
 "use client"
 import { useReadContract, useWriteContract } from "wagmi";
 import { abi, contractAddress } from '@/blockchain/config/configMarketplace';
-import { contractAddress as nftContract} from '@/blockchain/config/configNft';
+import { abi as abiNFT, contractAddress as nftContract} from '@/blockchain/config/configNft';
 
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { ReadContractErrorType } from "@wagmi/core";
@@ -139,21 +139,64 @@ export const useGetNFTFromCollection = (accountAddress : `0x${string}` | undefin
 // Ce hook permet de lister un NFT
 export const useListNFT = (accountAddress : `0x${string}` | undefined, tokenId:string, price:string, collectionId:string) => {
 
-    const { writeContract, isSuccess, isError, error } = useWriteContract();
-    
-    const request = () => {
+    const { writeContract, isSuccess:isSuccessContract, isError:isErrorContract, error:errorContract } = useWriteContract();
+    const [ isSuccess, setIsSuccess] = useState<boolean>();
+    const [ isError, setIsError] = useState<boolean>();
+    const [isListed, setIsListed] = useState<boolean>(false);
 
+
+    // Pour faire fonctionner le vente des NFT, il faut approuver la marketplace NFT
+
+    const approve = () => {
+        console.log("passage ici ")
+        writeContract({
+            address: nftContract,
+            abi: abiNFT,
+            functionName: "approve",
+            args: [contractAddress, tokenId],
+            account: accountAddress,
+        });
+        console.log(isSuccessContract)
+        console.log(errorContract)
+    }
+    
+    const listNFT = () => {
         writeContract({
             address: contractAddress,
             abi: abi,
             functionName: "listNFT",
-            args: [ nftContract, tokenId, price, collectionId ],
-            account:accountAddress
+            args: [nftContract, tokenId, price, collectionId],
+            account: accountAddress,
         });
 
+        setIsSuccess(isSuccessContract)
+        setIsError(isErrorContract)
     }
 
-    return {request, isSuccess, isError, error}
+    useEffect(()=>{
+        console.log("passage useEffect isSuccessContract : " + isSuccessContract)
+        if(isSuccessContract && !isListed){
+            console.log("succes Ok")
+            setIsListed(true)
+            listNFT()
+        }
+    },[isSuccessContract])
+
+    useEffect(()=> {
+        console.log("passage useEffect isErrorContract : " + isErrorContract)
+        if(isErrorContract){
+            console.log("Erorr test")
+            setIsSuccess(isSuccessContract)
+            setIsError(isErrorContract)
+        }
+    },[isErrorContract])
+    
+    
+    const request = () => {
+        approve();
+    }
+
+    return {request, isSuccess, isError, errorContract}
 }
 
 // ********************* TODO *********************
@@ -217,7 +260,7 @@ export const useGetNFTHorsSerie = (accountAddress : `0x${string}` | undefined) =
 // ERROR !!!!!!!!!!
 export const useBuyNFT  = (accountAddress : `0x${string}` | undefined, tokenId: string, price : string) => {
     const { writeContract, isSuccess, isError, error } = useWriteContract();
-    
+
     const request = () => {
         console.log("request useBuyNFT " + price + " tokenId : " + tokenId)
         writeContract({
