@@ -8,6 +8,8 @@ interface Collection {
     owner: `0x${string}`;
     description: string;
     totalSupply: number;
+    volumeTraded?: number;
+    floorPrice?: number
 }
 
 export const useGetCollection = (accountAddress: `0x${string}`) => {

@@ -13,9 +13,12 @@ import "hardhat/console.sol";
 
 contract NFTMarketplace is Initializable{
 
+    address public owner;
+
     // Ajout du NFT 
     constructor() {
         _disableInitializers();
+        owner = msg.sender;
     }
 
     // Structure pour une collection
@@ -146,6 +149,20 @@ contract NFTMarketplace is Initializable{
         collectionToNFTs[listingToRemove.collectionId].pop();
     }
 
+
+    function removeListingHorsSerie( Listing memory listingToRemove) public {
+        int256 index = findListingHorsSerieIndex(listingToRemove);
+        require(index >= 0, "Listing not found");
+
+        uint256 idx = uint256(index); // Convertir en uint256
+
+        // Remplace l'élément à supprimer par le dernier élément (swap & pop)
+        horsCollection[idx] = horsCollection[horsCollection.length - 1];
+
+        // Supprime le dernier élément du tableau
+        horsCollection.pop();
+    }
+
     function findListingIndex(uint256 collectionId ,Listing memory listingToFind) internal view returns (int256) {
         for (uint256 i = 0; i < collectionToNFTs[collectionId].length; i++) {
             if (
@@ -153,6 +170,21 @@ contract NFTMarketplace is Initializable{
                 collectionToNFTs[collectionId][i].seller == listingToFind.seller &&
                 collectionToNFTs[collectionId][i].price == listingToFind.price &&
                 keccak256(abi.encodePacked(collectionToNFTs[collectionId][i].tokenUri)) == keccak256(abi.encodePacked(listingToFind.tokenUri))
+            ) {
+                return int256(i); // Retourne l'index si trouvé
+            }
+        }
+        return -1; // Retourne -1 si non trouvé
+    }
+
+    // Cette fonction pemret de trouver l'indice du listing correspondant au NFT hors serie qui vient d'être vendu
+    function findListingHorsSerieIndex(Listing memory listingToFind) internal view returns (int256) {
+        for (uint256 i = 0; i < horsCollection.length; i++) {
+            if (
+                horsCollection[i].collectionId == listingToFind.collectionId &&
+                horsCollection[i].seller == listingToFind.seller &&
+                horsCollection[i].price == listingToFind.price &&
+                keccak256(abi.encodePacked(horsCollection[i].tokenUri)) == keccak256(abi.encodePacked(listingToFind.tokenUri))
             ) {
                 return int256(i); // Retourne l'index si trouvé
             }
@@ -201,10 +233,10 @@ contract NFTMarketplace is Initializable{
 
         //On va recupérer l'adresse du propriétaire du NFT
         IERC721 token = IERC721(nftContract);
-        address owner = token.ownerOf(tokenId);
+        address ownerToken = token.ownerOf(tokenId);
 
         // On verifie que c'est bien le propriétaire qui fait la demande
-        require(owner == msg.sender, "Not the owner");
+        require(ownerToken == msg.sender, "Not the owner");
         // On vérifie que la marketplace est approvée à utiliser le NFT
         require(token.getApproved(tokenId) == address(this), "Marketplace not approved");
 
@@ -268,15 +300,35 @@ contract NFTMarketplace is Initializable{
         Listing memory listing = listings[nftContract][tokenId];
         require(listing.price > 0, "NFT not for sale");
         require(msg.value >= listing.price, "Insufficient payment");
+        uint256 price = listing.price * 10**18;
+        uint256 fee = (price * 10) / 100 ;
+        uint256 amountForSeller = (price * 90) / 100;
 
-        uint256 fee = listing.price*0.1 ether;
-        uint256 amountForSeller = listing.price*0.9 ether ;
+        console.log("prix de base : ", msg.value);
+        console.log("fee :", fee);
+        console.log("amountForSeller :", amountForSeller);
+
         
-        delete listings[nftContract][tokenId];
+        
+
+        //payable(listing.seller).transfer(amountForSeller);
+        // payable(address(this)).transfer(fee);
 
         payable(listing.seller).transfer(amountForSeller);
-        payable(address(this)).transfer(fee);
+        payable(owner).transfer(fee);
 
+        // Transférer les fonds au destinataire (90 %)
+        // (bool successSeller, ) = payable(listing.seller).call{value: amountForSeller}("");
+        // require(successSeller, "Transfert au vendeur a echoue");
+
+        // // Transférer les frais au contrat (10 %)
+        // (bool successFee, ) = payable(owner).call{value: fee}("");
+        // require(successFee, "Transfert des frais au contrat a echoue");
+
+        delete listings[nftContract][tokenId];
+
+        console.log("Listing supprime");
+        console.log("Tranfert fond ok");
 
         IERC721(nftContract).safeTransferFrom(listing.seller, msg.sender, tokenId);
 
@@ -291,10 +343,17 @@ contract NFTMarketplace is Initializable{
         else {
             // ************** TODO ******************
             // On doit l'éffacer des hors série
+            findListingHorsSerieIndex(listing);
             
         }
 
+        console.log("Argent du contrat : ",getBalance());
+
         emit NFTSold(nftContract, tokenId, msg.sender, listing.price);
+    }
+
+    function getBalance() public view returns (uint256) {
+        return address(this).balance;
     }
 
     // Fonction pour annuler une liste de vente

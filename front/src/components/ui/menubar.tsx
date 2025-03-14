@@ -299,9 +299,11 @@ const MainMenubar = () => {
             </MenubarMenu>
             <MenubarMenu>
                 <MenubarTrigger>
-                    <Avatar>
+                    <Avatar
+                        onClick={() => router.push('/auth')}
+                    >
                         <AvatarImage src="https://github.com/shadcn.png" />
-                        <AvatarFallback>CN</AvatarFallback>
+                        <AvatarFallback>IM</AvatarFallback>
                     </Avatar>
                 </MenubarTrigger>
             </MenubarMenu>
