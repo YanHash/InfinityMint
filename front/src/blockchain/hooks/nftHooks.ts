@@ -15,7 +15,8 @@ export const useMintNFT = (accountAddress: `0x${string}` | undefined, name: stri
             abi: abi,
             functionName: "safeMint",
             args: [accountAddress, name, description, imageUrl, attributes, contractAddressMarketplace],
-            account: accountAddress
+            account: accountAddress,
+            chain: undefined
         });
 
     }

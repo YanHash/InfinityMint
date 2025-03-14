@@ -28,6 +28,7 @@ export const useCreateCollection = (accountAddress : `0x${string}` | undefined, 
             functionName: "createCollection",
             args: [ name, description ],
             account:accountAddress,
+            chain: undefined
         });
 
     }
@@ -155,6 +156,7 @@ export const useListNFT = (accountAddress : `0x${string}` | undefined, tokenId:s
             functionName: "approve",
             args: [contractAddress, tokenId],
             account: accountAddress,
+            chain: undefined
         });
         console.log(isSuccessContract)
         console.log(errorContract)
@@ -167,6 +169,7 @@ export const useListNFT = (accountAddress : `0x${string}` | undefined, tokenId:s
             functionName: "listNFT",
             args: [nftContract, tokenId, price, collectionId],
             account: accountAddress,
+            chain: undefined
         });
 
         setIsSuccess(isSuccessContract)
@@ -270,6 +273,7 @@ export const useBuyNFT  = (accountAddress : `0x${string}` | undefined, tokenId: 
             args: [ nftContract, tokenId ],
             account:accountAddress,
             value: parseEther(price),
+            chain: undefined
         });
 
     }
