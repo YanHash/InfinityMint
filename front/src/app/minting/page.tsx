@@ -1,15 +1,17 @@
 "use client";
 import * as React from "react";
-import {ChangeEvent, FormEvent, useState} from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import axios from "axios";
-import {Button} from "@/components/ui/button";
-import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle,} from "@/components/ui/card";
-import {Input} from "@/components/ui/input";
-import {Label} from "@/components/ui/label";
-import {Loader2, Trash2} from "lucide-react";
-import {useAccount} from "wagmi";
-import {useMintNFT} from "@/blockchain/hooks/nftHooks";
-import {Switch} from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Loader2, Trash2 } from "lucide-react";
+import { useAccount } from "wagmi";
+import { useMintNFT } from "@/blockchain/hooks/nftHooks";
+import { Switch } from "@/components/ui/switch";
+import Image from "next/image";
+
 
 
 interface CustomField {
@@ -19,14 +21,14 @@ interface CustomField {
 }
 
 export default function CardWithForm() {
-    const {address} = useAccount();
+    const { address } = useAccount();
     const [isNFTAlertOpen, setIsNFTAlertOpen] = useState<boolean>(false);
     const [nftName, setNftName] = useState<string>("");
     const [nftDescription, setNftDescription] = useState<string>("");
     const [file, setFile] = useState<File | null>(null);
     const [ipfsUrl, setIpfsUrl] = useState<string>("");
     const [uploading, setUploading] = useState<boolean>(false);
-    const [customFields, setCustomFields] = useState<CustomField[]>([{id: Date.now(), name: "", value: ""}]);
+    const [customFields, setCustomFields] = useState<CustomField[]>([{ id: Date.now(), name: "", value: "" }]);
     const [isGenerating, setIsGenerating] = useState(false); // Toggle pour choisir entre génération ou upload
 
 
@@ -35,7 +37,7 @@ export default function CardWithForm() {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
 
-    const {request: requestMintNFT} = useMintNFT(address, nftName, nftDescription, ipfsUrl, JSON.stringify(customFields));
+    const { request: requestMintNFT } = useMintNFT(address, nftName, nftDescription, ipfsUrl, JSON.stringify(customFields));
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
@@ -60,7 +62,7 @@ export default function CardWithForm() {
             });
 
             const ipfsHash = response.data.IpfsHash;
-            setIpfsUrl(`ipfs://${ipfsHash}`);
+            setIpfsUrl(`https://gateway.pinata.cloud/ipfs/${ipfsHash}`);
         } catch (error) {
             console.error("Upload error:", error);
         }
@@ -68,11 +70,11 @@ export default function CardWithForm() {
     };
 
     const addField = () => {
-        setCustomFields([...customFields, {id: Date.now(), name: "", value: ""}]);
+        setCustomFields([...customFields, { id: Date.now(), name: "", value: "" }]);
     };
 
     const updateField = (id: number, key: "name" | "value", newValue: string) => {
-        setCustomFields(customFields.map(field => field.id === id ? {...field, [key]: newValue} : field));
+        setCustomFields(customFields.map(field => field.id === id ? { ...field, [key]: newValue } : field));
     };
 
     const removeField = (id: number) => {
@@ -102,7 +104,7 @@ export default function CardWithForm() {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({prompt}),
+                body: JSON.stringify({ prompt }),
             });
 
 
@@ -126,7 +128,7 @@ export default function CardWithForm() {
     return (
         <div
             className="flex items-center justify-center h-screen bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
-            <Card className="w-[550px]">
+            <Card className="w-[550px] mx-auto">
                 <CardHeader className="text-center">
                     <CardTitle>Mint Your NFT</CardTitle>
                     <CardDescription>Create your unique NFT.</CardDescription>
@@ -137,33 +139,32 @@ export default function CardWithForm() {
                             <div className="flex flex-col space-y-1.5">
                                 <Label>Name</Label>
                                 <Input value={nftName} onChange={(e) => setNftName(e.target.value)}
-                                       placeholder="Name of your NFT"/>
+                                    placeholder="Name of your NFT" />
                             </div>
                             <div className="flex flex-col space-y-1.5">
                                 <Label>Description</Label>
                                 <Input value={nftDescription} onChange={(e) => setNftDescription(e.target.value)}
-                                       placeholder="Description of your NFT"/>
+                                    placeholder="Description of your NFT" />
                             </div>
                             <div className="flex justify-between my-4">
                                 <Label>Mode Génération d'image</Label>
-                                <Switch checked={isGenerating} onCheckedChange={setIsGenerating} className=""/>
+                                <Switch checked={isGenerating} onCheckedChange={setIsGenerating} className="" />
                             </div>
 
                             {isGenerating ? (
                                 <>
                                     <Label>Prompt pour l'image</Label>
                                     <Input type="text" value={prompt} onChange={(e) => setPrompt(e.target.value)}
-                                           placeholder="Décrivez l'image..."/>
+                                        placeholder="Décrivez l'image..." />
                                     <Button onClick={generateImage} disabled={loading || !prompt.trim()}>
-                                        {loading ? <Loader2 className="animate-spin"/> : "Générer l'image"}
+                                        {loading ? <Loader2 className="animate-spin" /> : "Générer l'image"}
                                     </Button>
-                                    {imageUrl &&
-                                        <img src={imageUrl} alt="Generated" className="mt-2 rounded-lg shadow-md"/>}
+
                                 </>
                             ) : (
                                 <>
                                     <Label>Upload une image</Label>
-                                    <Input type="file" onChange={handleFileChange}/>
+                                    <Input type="file" onChange={handleFileChange} />
                                     <Button onClick={uploadToPinata} disabled={uploading}>
                                         {uploading ? "Uploading..." : "Upload to Pinata"}
                                     </Button>
@@ -173,13 +174,13 @@ export default function CardWithForm() {
                             {customFields.map((field) => (
                                 <div key={field.id} className="flex items-center space-x-2">
                                     <Input value={field.name}
-                                           onChange={(e) => updateField(field.id, "name", e.target.value)}
-                                           placeholder="Field Name"/>
+                                        onChange={(e) => updateField(field.id, "name", e.target.value)}
+                                        placeholder="Field Name" />
                                     <Input value={field.value}
-                                           onChange={(e) => updateField(field.id, "value", e.target.value)}
-                                           placeholder="Field Value"/>
+                                        onChange={(e) => updateField(field.id, "value", e.target.value)}
+                                        placeholder="Field Value" />
                                     <Button variant="ghost" onClick={() => removeField(field.id)}>
-                                        <Trash2 className="w-5 h-5 text-red-500"/>
+                                        <Trash2 className="w-5 h-5 text-red-500" />
                                     </Button>
                                 </div>
                             ))}
@@ -196,6 +197,37 @@ export default function CardWithForm() {
                     </Button>
                 </CardFooter>
             </Card>
+            {(ipfsUrl || nftName) && (
+                <Card className="mx-auto rounded-2xl shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition w-[400px] mt-6">
+                    <h1 className="text-center text-lg font-semibold mt-2">NFT Preview</h1>
+                    <div className="flex justify-center">
+                        <Image
+                            src={
+                                ipfsUrl ?? "/noImage.jpeg"
+                            }
+                            alt="NFT Preview"
+                            width={300}
+                            height={300}
+                            className="rounded-lg shadow-md"
+                        />
+
+
+                    </div>
+                    <CardContent className="p-4">
+                        <h2 className="text-xl font-semibold">{nftName || "Nom du NFT"}</h2>
+                        <p className="text-gray-600 text-sm">{nftDescription || "Description du NFT"}</p>
+
+                        <div className="mt-2">
+                            {customFields.length > 0 && customFields.map((field) => (
+                                <p key={field.id} className="text-gray-700 text-sm">
+                                    <strong>{field.name}:</strong> {field.value}
+                                </p>
+                            ))}
+                        </div>
+                    </CardContent>
+                </Card>
+            )}
+
         </div>
     );
 }
