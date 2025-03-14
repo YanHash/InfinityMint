@@ -203,7 +203,7 @@ export default function CardWithForm() {
                     <div className="flex justify-center">
                         <Image
                             src={
-                                ipfsUrl ?? "/noImage.jpeg"
+                                ipfsUrl || "/noImage.jpeg"
                             }
                             alt="NFT Preview"
                             width={300}
