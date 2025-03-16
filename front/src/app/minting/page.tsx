@@ -26,14 +26,13 @@ export default function CardWithForm() {
     const [nftName, setNftName] = useState<string>("");
     const [nftDescription, setNftDescription] = useState<string>("");
     const [file, setFile] = useState<File | null>(null);
-    const [ipfsUrl, setIpfsUrl] = useState<string>("");
+    const [ipfsUrl, setIpfsUrl] = useState<string>("/noImage.jpeg");
     const [uploading, setUploading] = useState<boolean>(false);
     const [customFields, setCustomFields] = useState<CustomField[]>([{ id: Date.now(), name: "", value: "" }]);
     const [isGenerating, setIsGenerating] = useState(false); // Toggle pour choisir entre génération ou upload
 
 
     const [prompt, setPrompt] = useState<string>("");
-    const [imageUrl, setImageUrl] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
 
@@ -93,7 +92,6 @@ export default function CardWithForm() {
         if (!prompt.trim()) return;
 
         setLoading(true);
-        setImageUrl("");
         setIpfsUrl("");
         setError("");
 
@@ -116,7 +114,6 @@ export default function CardWithForm() {
                 return;
             }
 
-            setImageUrl(data.imageUrl || "");
             setIpfsUrl(data.ipfsUrl || "");
         } catch (error) {
             setError("Erreur de connexion au serveur.");
